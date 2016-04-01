@@ -1,2 +1,2 @@
-# andrid-odoo-contacts-2016
+# android-odoo-contacts-2016
 Odoo Contacts application. Offline, sync to device contacts, import contact from device to odoo. and more...
