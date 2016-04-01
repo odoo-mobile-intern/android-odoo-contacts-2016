@@ -1,2 +1,8 @@
-# android-odoo-contacts-2016
-Odoo Contacts application. Offline, sync to device contacts, import contact from device to odoo. and more...
+# Odoo Contacts application with Android.
+
+ - Offline access, 
+ - Sync contacts from odoo to device contacts
+ - Import contact to Odoo from device
+ - Quick create contact even offline
+ - Calling, messaging and mailing to contacts
+
