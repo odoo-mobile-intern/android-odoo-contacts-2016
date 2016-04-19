@@ -116,7 +116,7 @@ public class LoginActivity extends AppCompatActivity implements IOdooLoginCallba
     @Override
     public void onError(OdooError odooError) {
         Log.e("odoo connection", odooError.getMessage(), odooError.getThrowable());
-        Toast.makeText(this, "Unable to connect with odoo server", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "This is Unable to connect with odoo server", Toast.LENGTH_SHORT).show();
     }
 
     @Override
