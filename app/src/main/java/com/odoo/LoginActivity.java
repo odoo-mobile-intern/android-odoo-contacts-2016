@@ -12,98 +12,126 @@ import android.widget.Toast;
 
 import com.odoo.auth.OdooAuthenticator;
 
+import java.util.List;
+
 import odoo.Odoo;
 import odoo.helper.OUser;
 import odoo.handler.OdooVersionException;
+import odoo.listeners.IDatabaseListListener;
 import odoo.listeners.IOdooConnectionListener;
 import odoo.listeners.IOdooLoginCallback;
 import odoo.listeners.OdooError;
 
-public class LoginActivity extends AppCompatActivity implements IOdooLoginCallback, View.OnClickListener {
+public class LoginActivity extends AppCompatActivity implements IOdooLoginCallback, View.OnClickListener,
+        IOdooConnectionListener {
 
-    private EditText host,user,pwd;
-    private Button button;
-    public Odoo odoo;
+    private EditText edtHost, edtUsername, edtPassword;
+    private Button btnLogin;
+    private Odoo odoo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        /*
+        TODO: Check for available user account, If found redirect to home screen.
+         */
 
         //code for Login object Initialization
-        host = (EditText) findViewById(R.id.host);
-        user = (EditText) findViewById(R.id.user);
-        pwd = (EditText) findViewById(R.id.password);
+        edtHost = (EditText) findViewById(R.id.edtHost);
+        edtUsername = (EditText) findViewById(R.id.edtUsername);
+        edtPassword = (EditText) findViewById(R.id.edtPassword);
 
-        button = (Button) findViewById(R.id.button);
-        button.setOnClickListener(this);
-
-
-        //code for create account
-        AccountManager manager=(AccountManager) getSystemService(ACCOUNT_SERVICE);
-        Account newAccount= new Account("meghavyas-odoo", OdooAuthenticator.AUTH_TYPE);
-        Bundle userdata=new Bundle();
-        userdata.putString("host1","http://jfjnnjf");
-        userdata.putString("db", "imvmv");
-
-        manager.addAccountExplicitly(newAccount,"test",userdata);
-
-        Account[] accounts=manager.getAccountsByType(OdooAuthenticator.AUTH_TYPE);
-
-        Log.e(">>> COUNT", accounts.length + "<<<");
-
-        for (Account account:accounts){
-            Log.e("acc",account.name+" : "+account.type);
-            String host1=manager.getUserData(account,"host1");
-        }
-
+        btnLogin = (Button) findViewById(R.id.btnLogin);
+        btnLogin.setOnClickListener(this);
 
     }
 
     @Override
     public void onClick(View v) {
 
-        Log.e(">>>>>>","http://" + host.getText().toString());
-        Log.e(">>>>>>",user.getText().toString());
-        Log.e(">>>>>>",pwd.getText().toString());
+        if (v.getId() == R.id.btnLogin) {
 
+            edtHost.setError(null);
+            if (edtHost.getText().toString().trim().isEmpty()) {
+                edtHost.setError(getString(R.string.error_host_name_required));
+                edtHost.requestFocus();
+                return;
+            }
+            edtUsername.setError(null);
+            if (edtUsername.getText().toString().trim().isEmpty()) {
+                edtUsername.setError(getString(R.string.error_username_required));
+                edtUsername.requestFocus();
+                return;
+            }
+            edtPassword.setError(null);
+            if (edtPassword.getText().toString().trim().isEmpty()) {
+                edtPassword.setError(getString(R.string.error_password_required));
+                edtPassword.requestFocus();
+                return;
+            }
+
+            login();
+        }
+    }
+
+    private void login() {
+        String host_url = stripURL(edtHost.getText().toString().trim());
         try {
-            odoo= Odoo.createInstance(this,"http://" +  host.getText().toString());
-            odoo.setOnConnect(new IOdooConnectionListener() {
-                @Override
-                public void onConnect(Odoo odoo) {
-                    odoo.authenticate(user.getText().toString(),pwd.getText().toString(),"142733-9-0-db0def-all",LoginActivity.this);
-
-
-                }
-
-                @Override
-                public void onError(OdooError odooError) {
-
-                }
-            });
-
-
-
-        }catch (OdooVersionException e){
+            odoo = Odoo.createInstance(this, host_url);
+            odoo.setOnConnect(this);
+        } catch (OdooVersionException e) {
             e.printStackTrace();
         }
+    }
+
+    private String stripURL(String host) {
+        if (host.contains("http://") || host.contains("https://")) {
+            return host;
+        } else {
+            return "http://" + host;
+        }
+    }
 
 
+    @Override
+    public void onConnect(final Odoo odoo) {
+        odoo.getDatabaseList(new IDatabaseListListener() {
+            @Override
+            public void onDatabasesLoad(List<String> list) {
+                if (list.size() > 1) {
+                    // TODO: Show database selection dialog
+                } else {
+                    // auto select first database and login.
+                    String username = edtUsername.getText().toString().trim();
+                    String password = edtPassword.getText().toString().trim();
+                    String database = list.get(0);
+                    odoo.authenticate(username, password, database, LoginActivity.this);
+                }
+            }
+        });
+    }
+
+    @Override
+    public void onError(OdooError odooError) {
+        Log.e("odoo connection", odooError.getMessage(), odooError.getThrowable());
+        Toast.makeText(this, "Unable to connect with odoo server", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onLoginSuccess(Odoo odoo, OUser oUser) {
-        Toast.makeText(this,"Successfull login", Toast.LENGTH_SHORT).show();
-        Log.e(">>>Success",oUser.getName());
 
+        AccountManager manager = (AccountManager) getSystemService(ACCOUNT_SERVICE);
+        Account account = new Account(oUser.getAndroidName(), OdooAuthenticator.AUTH_TYPE);
+        if (manager.addAccountExplicitly(account, oUser.getPassword(), oUser.getAsBundle())) {
+            //TODO: Redirect to home screen
+        }
     }
 
     @Override
     public void onLoginFail(OdooError odooError) {
-        Toast.makeText(this,"Not sucessfull login", Toast.LENGTH_SHORT).show();
-        Log.e(">>>fail",odooError+"");
-
+        Toast.makeText(LoginActivity.this, R.string.invalid_username_or_password, Toast.LENGTH_SHORT).show();
     }
+
 }
