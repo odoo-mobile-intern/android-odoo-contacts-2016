@@ -2,16 +2,21 @@ package com.odoo;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.odoo.auth.OdooAuthenticator;
 
+import java.io.ByteArrayOutputStream;
 import java.util.List;
 
 import odoo.Odoo;
@@ -29,11 +34,12 @@ public class LoginActivity extends AppCompatActivity implements IOdooLoginCallba
     private Button btnLogin;
     private Odoo odoo;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
         /*
         TODO: Check for available user account, If found redirect to home screen.
          */
@@ -46,6 +52,8 @@ public class LoginActivity extends AppCompatActivity implements IOdooLoginCallba
         btnLogin = (Button) findViewById(R.id.btnLogin);
         btnLogin.setOnClickListener(this);
 
+
+
     }
 
     @Override
@@ -54,6 +62,7 @@ public class LoginActivity extends AppCompatActivity implements IOdooLoginCallba
         if (v.getId() == R.id.btnLogin) {
 
             edtHost.setError(null);
+
             if (edtHost.getText().toString().trim().isEmpty()) {
                 edtHost.setError(getString(R.string.error_host_name_required));
                 edtHost.requestFocus();
@@ -116,7 +125,7 @@ public class LoginActivity extends AppCompatActivity implements IOdooLoginCallba
     @Override
     public void onError(OdooError odooError) {
         Log.e("odoo connection", odooError.getMessage(), odooError.getThrowable());
-        Toast.makeText(this, "This is Unable to connect with odoo server", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Unable to connect with odoo server", Toast.LENGTH_SHORT).show();
     }
 
     @Override
