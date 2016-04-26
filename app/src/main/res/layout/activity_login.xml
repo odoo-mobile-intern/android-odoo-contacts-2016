@@ -53,9 +53,8 @@
             android:hint="Server URL"
             android:padding="8dp"
             android:textAppearance="?android:textAppearanceMedium"
-            android:textColor="@color/textIconColor">
+            android:textColor="@color/textIconColor"/>
 
-        </EditText>
     </LinearLayout>
 
     <LinearLayout

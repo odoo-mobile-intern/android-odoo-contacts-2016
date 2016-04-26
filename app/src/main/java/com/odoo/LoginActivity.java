@@ -2,6 +2,7 @@ package com.odoo;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.v7.app.AppCompatActivity;
@@ -62,7 +63,6 @@ public class LoginActivity extends AppCompatActivity implements IOdooLoginCallba
         if (v.getId() == R.id.btnLogin) {
 
             edtHost.setError(null);
-
             if (edtHost.getText().toString().trim().isEmpty()) {
                 edtHost.setError(getString(R.string.error_host_name_required));
                 edtHost.requestFocus();
@@ -111,6 +111,12 @@ public class LoginActivity extends AppCompatActivity implements IOdooLoginCallba
             public void onDatabasesLoad(List<String> list) {
                 if (list.size() > 1) {
                     // TODO: Show database selection dialog
+
+                    String username = edtUsername.getText().toString().trim();
+                    String password = edtPassword.getText().toString().trim();
+                    String database = list.get(0);
+                    odoo.authenticate(username, password, database, LoginActivity.this);
+
                 } else {
                     // auto select first database and login.
                     String username = edtUsername.getText().toString().trim();
@@ -135,6 +141,7 @@ public class LoginActivity extends AppCompatActivity implements IOdooLoginCallba
         Account account = new Account(oUser.getAndroidName(), OdooAuthenticator.AUTH_TYPE);
         if (manager.addAccountExplicitly(account, oUser.getPassword(), oUser.getAsBundle())) {
             //TODO: Redirect to home screen
+            startActivity(new Intent(this,HomeActivity.class));
         }
     }
 
