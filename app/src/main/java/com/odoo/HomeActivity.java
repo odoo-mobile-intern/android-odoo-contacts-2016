@@ -1,6 +1,7 @@
 package com.odoo;
 
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
@@ -15,14 +16,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import android.widget.TextView;
 
-
-public class HomeActivity extends AppCompatActivity {
+public class HomeActivity extends AppCompatActivity implements TabLayout.OnTabSelectedListener {
 
     private SectionsPagerAdapter mSectionsPagerAdapter;
 
     private ViewPager mViewPager;
+    private TabLayout tabLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,10 +32,23 @@ public class HomeActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        tabLayout = (TabLayout) findViewById(R.id.tab_layout);
+        //code for tab
+        tabLayout.addTab(tabLayout.newTab().setText("Recent"));
+        tabLayout.addTab(tabLayout.newTab().setText("Contacts").setIcon(R.drawable.ic_person));
+        tabLayout.addTab(tabLayout.newTab().setText("Favourite"));
+        tabLayout.setOnTabSelectedListener(this);
+
+
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+
+        //code for swipe
 
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
+
+        tabLayout.getTabAt(1).setIcon(R.drawable.ic_person);
+        tabLayout.setupWithViewPager(mViewPager);
 
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -59,18 +72,31 @@ public class HomeActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
         return super.onOptionsItemSelected(item);
     }
+
+    @Override
+    public void onTabSelected(TabLayout.Tab tab) {
+        mViewPager.setCurrentItem(tab.getPosition());
+    }
+
+    @Override
+    public void onTabUnselected(TabLayout.Tab tab) {
+
+    }
+
+    @Override
+    public void onTabReselected(TabLayout.Tab tab) {
+
+    }
+
 
     public static class PlaceholderFragment extends Fragment {
         private static final String ARG_SECTION_NUMBER = "section_number";
 
         public PlaceholderFragment() {
         }
+
         public static PlaceholderFragment newInstance(int sectionNumber) {
             PlaceholderFragment fragment = new PlaceholderFragment();
             Bundle args = new Bundle();
@@ -82,7 +108,7 @@ public class HomeActivity extends AppCompatActivity {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_home, container, false);
+            View rootView = inflater.inflate(R.layout.fragment_contact, container, false);
             return rootView;
         }
     }
@@ -95,6 +121,17 @@ public class HomeActivity extends AppCompatActivity {
 
         @Override
         public Fragment getItem(int position) {
+            switch (position) {
+                case 0:
+                    RecentFragment recentFragment = new RecentFragment();
+                    return recentFragment;
+                case 1:
+                    ContactFragment contactFragment = new ContactFragment();
+                    return contactFragment;
+                case 2:
+                    FavouriteFragment favouriteFragment = new FavouriteFragment();
+                    return favouriteFragment;
+            }
             return PlaceholderFragment.newInstance(position + 1);
         }
 
@@ -106,6 +143,14 @@ public class HomeActivity extends AppCompatActivity {
         @Override
         public CharSequence getPageTitle(int position) {
             switch (position) {
+
+                case 0:
+                    return "Recent";
+                case 1:
+                    return "Contacts";
+                case 2:
+                    return "Favourite";
+
             }
             return null;
         }

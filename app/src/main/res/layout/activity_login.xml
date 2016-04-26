@@ -50,6 +50,7 @@
             android:layout_weight="1"
             android:background="@android:color/transparent"
             android:fontFamily="sans-serif"
+            android:singleLine="true"
             android:hint="Server URL"
             android:padding="8dp"
             android:textAppearance="?android:textAppearanceMedium"
@@ -80,6 +81,7 @@
             android:background="@android:color/transparent"
             android:fontFamily="sans-serif"
             android:hint="Username"
+            android:singleLine="true"
             android:padding="8dp"
             android:textAppearance="?android:textAppearanceMedium"
             android:textColor="@color/textIconColor" />
@@ -107,6 +109,7 @@
             android:background="@android:color/transparent"
             android:fontFamily="sans-serif"
             android:hint="Password"
+            android:singleLine="true"
             android:inputType="textPassword"
             android:padding="8dp"
             android:textAppearance="?android:textAppearanceMedium"

@@ -21,11 +21,15 @@ import java.io.ByteArrayOutputStream;
 import java.util.List;
 
 import odoo.Odoo;
+import odoo.helper.ODomain;
 import odoo.helper.OUser;
 import odoo.handler.OdooVersionException;
+import odoo.helper.OdooFields;
+import odoo.helper.utils.gson.OdooResult;
 import odoo.listeners.IDatabaseListListener;
 import odoo.listeners.IOdooConnectionListener;
 import odoo.listeners.IOdooLoginCallback;
+import odoo.listeners.IOdooResponse;
 import odoo.listeners.OdooError;
 
 public class LoginActivity extends AppCompatActivity implements IOdooLoginCallback, View.OnClickListener,
@@ -34,7 +38,6 @@ public class LoginActivity extends AppCompatActivity implements IOdooLoginCallba
     private EditText edtHost, edtUsername, edtPassword;
     private Button btnLogin;
     private Odoo odoo;
-
 
 
     @Override
@@ -52,7 +55,6 @@ public class LoginActivity extends AppCompatActivity implements IOdooLoginCallba
 
         btnLogin = (Button) findViewById(R.id.btnLogin);
         btnLogin.setOnClickListener(this);
-
 
 
     }
@@ -141,7 +143,23 @@ public class LoginActivity extends AppCompatActivity implements IOdooLoginCallba
         Account account = new Account(oUser.getAndroidName(), OdooAuthenticator.AUTH_TYPE);
         if (manager.addAccountExplicitly(account, oUser.getPassword(), oUser.getAsBundle())) {
             //TODO: Redirect to home screen
-            startActivity(new Intent(this,HomeActivity.class));
+            OdooFields fields=new OdooFields();
+            fields.addAll(new String[]{"name","email"});
+            ODomain domain = new ODomain();
+            odoo.searchRead("res.partner", fields, domain, 0, 10, null, new IOdooResponse() {
+                @Override
+                public void onResponse(OdooResult odooResult) {
+                    Log.v("RECORDS", odooResult + " ");
+                }
+
+                @Override
+                public void onError(OdooError odooError) {
+
+                }
+            });
+
+
+            startActivity(new Intent(this, HomeActivity.class));
         }
     }
 
