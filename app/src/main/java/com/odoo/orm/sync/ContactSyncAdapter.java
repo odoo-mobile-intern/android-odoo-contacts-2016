@@ -6,10 +6,11 @@ import android.content.ContentProviderClient;
 import android.content.Context;
 import android.content.SyncResult;
 import android.os.Bundle;
+import android.util.Log;
 
-public class ContactSyncAdatper extends AbstractThreadedSyncAdapter {
+public class ContactSyncAdapter extends AbstractThreadedSyncAdapter {
 
-    public ContactSyncAdatper(Context context, boolean autoInitialize) {
+    public ContactSyncAdapter(Context context, boolean autoInitialize) {
         super(context, autoInitialize);
     }
 
@@ -18,5 +19,8 @@ public class ContactSyncAdatper extends AbstractThreadedSyncAdapter {
                               ContentProviderClient provider, SyncResult syncResult) {
         //TODO: Logic for sync data.....
         // Getting data from server.and storing data to database....
+        for (int i = 1; i <= 500; i++) {
+            Log.v("Hello", "I'm synceddd " + i);
+        }
     }
 }
