@@ -1,4 +1,4 @@
-package com.odoo.database;
+package com.odoo.orm;
 
 import android.database.Cursor;
 

@@ -35,10 +35,13 @@ public class LoginActivity extends AppCompatActivity implements IOdooLoginCallba
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        /*
-        TODO: Check for available user account, If found redirect to home screen.
-         */
 
+        AccountManager manager = (AccountManager) getSystemService(ACCOUNT_SERVICE);
+        Account[] accounts = manager.getAccountsByType(OdooAuthenticator.AUTH_TYPE);
+        if (accounts.length > 0) {
+            // account found. redirecting to home screen.
+            redirectToHome();
+        }
 
         //code for Login object Initialization
         edtHost = (EditText) findViewById(R.id.edtHost);
@@ -127,14 +130,18 @@ public class LoginActivity extends AppCompatActivity implements IOdooLoginCallba
         AccountManager manager = (AccountManager) getSystemService(ACCOUNT_SERVICE);
         Account account = new Account(oUser.getAndroidName(), OdooAuthenticator.AUTH_TYPE);
         if (manager.addAccountExplicitly(account, oUser.getPassword(), oUser.getAsBundle())) {
-            startActivity(new Intent(this, HomeActivity.class));
-            finish();
+            redirectToHome();
         }
     }
 
     @Override
     public void onLoginFail(OdooError odooError) {
         Toast.makeText(LoginActivity.this, R.string.invalid_username_or_password, Toast.LENGTH_SHORT).show();
+    }
+
+    private void redirectToHome() {
+        startActivity(new Intent(this, HomeActivity.class));
+        finish();
     }
 
 }
