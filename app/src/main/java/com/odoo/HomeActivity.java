@@ -35,21 +35,16 @@ public class HomeActivity extends AppCompatActivity implements TabLayout.OnTabSe
         tabLayout = (TabLayout) findViewById(R.id.tab_layout);
         //code for tab
         tabLayout.addTab(tabLayout.newTab().setText("Recent"));
-        tabLayout.addTab(tabLayout.newTab().setText("Contacts").setIcon(R.drawable.ic_person));
+        tabLayout.addTab(tabLayout.newTab().setText("Contacts"));
         tabLayout.addTab(tabLayout.newTab().setText("Favourite"));
         tabLayout.setOnTabSelectedListener(this);
-
 
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
         //code for swipe
-
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
-
-        tabLayout.getTabAt(1).setIcon(R.drawable.ic_person);
         tabLayout.setupWithViewPager(mViewPager);
-
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {

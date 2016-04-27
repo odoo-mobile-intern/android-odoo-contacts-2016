@@ -12,7 +12,7 @@ import java.util.HashMap;
 public class AllTables {
     public HashMap<String, ContactDatabase> tables (Context context){
         HashMap<String, ContactDatabase> tableObjects= new HashMap<>();
-        tableObjects.put("ContactTable",new ContactTable(context));
+        tableObjects.put("res.partner",new ContactTable(context));
         return tableObjects;
     }
 }

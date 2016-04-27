@@ -33,8 +33,7 @@
 
         <activity
             android:name=".HomeActivity"
-            android:label="@string/title_activity_home"
-            android:theme="@style/AppTheme"></activity>
+            android:label="@string/title_activity_home"></activity>
     </application>
 
 </manifest>

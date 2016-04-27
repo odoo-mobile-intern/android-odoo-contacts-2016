@@ -11,7 +11,7 @@ import com.odoo.database.ContactDatabase;
  */
 public class ContactTable extends ContactDatabase {
     public ContactTable(Context context) {
-        super(context,"ContactTable");
+        super(context,"res.partner");
 
         AddColumns(new ContactColumn("id", ColumnType.INTEGER));
         AddColumns(new ContactColumn("name", ColumnType.VARCHAR));

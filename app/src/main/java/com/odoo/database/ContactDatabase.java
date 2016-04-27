@@ -54,7 +54,7 @@ public class ContactDatabase extends SQLiteOpenHelper implements BaseColumns {
     }
 
     public String getTableName() {
-        return mtableName;
+        return mtableName.replace(".","_");
     }
 
 
