@@ -5,7 +5,7 @@ import com.odoo.orm.types.ColumnType;
 public class OColumn {
     public String name, label, relModel;
     public ColumnType columnType;
-    public Boolean primaryKey = false, autoIncrement = false;
+    public Boolean primaryKey = false, autoIncrement = false, isLocal = false;
     public Object defValue = null;
 
     public OColumn(String label, ColumnType columnType) {
@@ -30,6 +30,11 @@ public class OColumn {
 
     public OColumn setDefault(Object defValue) {
         this.defValue = defValue;
+        return this;
+    }
+
+    public OColumn makeLocal() {
+        isLocal = true;
         return this;
     }
 }

@@ -1,7 +1,5 @@
 package com.odoo.orm;
 
-import android.util.Log;
-
 /**
  * Created by sha on 25/4/16.
  */
@@ -20,7 +18,7 @@ public class StatementBuilder {
                 .append(" (");
 
         StringBuffer columns = new StringBuffer();
-        for (OColumn column : mTable.getColumn()) {
+        for (OColumn column : mTable.getColumns()) {
             columns.append(column.name)
                     .append(" ")
                     .append(column.columnType.toString());
@@ -38,7 +36,6 @@ public class StatementBuilder {
         }
         String columnString = columns.toString();
         sql.append(columnString.substring(0, columnString.length() - 2)).append(" )");
-        Log.e(">>> ", sql.toString());
         return sql.toString();
     }
 }

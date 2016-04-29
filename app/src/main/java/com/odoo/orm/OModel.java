@@ -28,15 +28,16 @@ public abstract class OModel extends SQLiteOpenHelper implements BaseColumns {
 
     OColumn _id = new OColumn("Local ID", ColumnType.INTEGER)
             .makeAutoIncrement()
-            .makePrimaryKey();
+            .makePrimaryKey().makeLocal();
+
     OColumn id = new OColumn("Server ID", ColumnType.INTEGER)
             .setDefault("0");
 
     OColumn _write_date = new OColumn("Local Write date", ColumnType.DATETIME)
-            .setDefault("false");
+            .setDefault("false").makeLocal();
 
-    OColumn is_dirty = new OColumn("Dirty record", ColumnType.BOOLEAN).setDefault("false");
-
+    OColumn is_dirty = new OColumn("Dirty record", ColumnType.BOOLEAN).setDefault("false")
+            .makeLocal();
 
     public OModel(Context context, String model) {
         super(context, DB_NAME, null, DB_VERSION);
@@ -72,7 +73,7 @@ public abstract class OModel extends SQLiteOpenHelper implements BaseColumns {
         return mModelName;
     }
 
-    public List<OColumn> getColumn() {
+    public List<OColumn> getColumns() {
         List<OColumn> columns = new ArrayList<>();
         List<Field> fields = new ArrayList<>();
         fields.addAll(Arrays.asList(getClass().getSuperclass().getDeclaredFields()));
@@ -122,6 +123,13 @@ public abstract class OModel extends SQLiteOpenHelper implements BaseColumns {
 
     }
 
+    public int update(ContentValues values, String where, String... args) {
+        SQLiteDatabase db = getWritableDatabase();
+        int count = db.update(getTableName(), values, where, args);
+        db.close();
+        return count;
+    }
+
     public int count() {
         int count = 0;
         Cursor cr = null;
@@ -137,5 +145,40 @@ public abstract class OModel extends SQLiteOpenHelper implements BaseColumns {
         db.close();
 
         return count;
+    }
+
+    public String[] getServerColumn() {
+        List<String> columns = new ArrayList<>();
+        for (OColumn column : getColumns()) {
+            if (!column.isLocal) {
+                columns.add(column.name);
+            }
+        }
+        return columns.toArray(new String[columns.size()]);
+    }
+
+    public int update_or_create(ContentValues values, String where, String... args) {
+        List<ListRow> records = select(where, args);
+        if (records.size() > 0) {
+            // Update record
+            ListRow row = records.get(0);
+            update(values, where, args);
+            return row.getInt(_ID);
+        } else {
+            // create new record
+            return create(values);
+        }
+    }
+
+    public static OModel createInstance(String modelName, Context context) {
+        ModelRegistry registry = new ModelRegistry();
+        HashMap<String, OModel> models = registry.models(context);
+        for (String modelKey : models.keySet()) {
+            OModel m = models.get(modelKey);
+            if (m.getModelName().equals(modelName)) {
+                return m;
+            }
+        }
+        return null;
     }
 }
