@@ -43,7 +43,6 @@ public abstract class OModel extends SQLiteOpenHelper implements BaseColumns {
         super(context, DB_NAME, null, DB_VERSION);
         mContext = context;
         mModelName = model;
-
     }
 
     @Override
@@ -57,7 +56,6 @@ public abstract class OModel extends SQLiteOpenHelper implements BaseColumns {
                 Log.v("Database", "Model registered : " + model.getModelName());
             }
         }
-
     }
 
     @Override
@@ -120,7 +118,6 @@ public abstract class OModel extends SQLiteOpenHelper implements BaseColumns {
         cursor.close();
         db.close();
         return rows;
-
     }
 
     public int update(ContentValues values, String where, String... args) {
@@ -138,7 +135,7 @@ public abstract class OModel extends SQLiteOpenHelper implements BaseColumns {
         cr = db.rawQuery("select count(*) as total from " + getTableName(), null);
 
         if (cr.moveToFirst()) {
-            count = cr.getColumnIndex("total");
+            count = cr.getInt(0);
         }
 
         cr.close();
