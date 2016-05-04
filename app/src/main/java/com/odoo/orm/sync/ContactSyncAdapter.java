@@ -47,13 +47,13 @@ public class ContactSyncAdapter extends AbstractThreadedSyncAdapter {
         try {
 
             // Because onPerformSync works in background. we have to use synchronized method in this scope.
-            
+            Odoo.DEBUG=true;
             // Quick connecting with odoo in synchronized mode
             odoo = Odoo.createQuickInstance(mContext, mUser.getHost());
             // Quick authenticating with user in synchronized mode
             mUser = odoo.authenticate(mUser.getUsername(), mUser.getPassword(), mUser.getDatabase());
 
-            // Creating partner database table object
+            // Creating Respartner database table object
             ResPartner partner = new ResPartner(mContext);
 
             OdooFields fields = new OdooFields();

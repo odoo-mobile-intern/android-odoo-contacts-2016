@@ -7,9 +7,14 @@
 
     <string name="action_settings">Settings</string>
     <string name="section_format">Hello World from section: %1$d</string>
-    <string name="title_activity_home">Home</string>
+    <string name="title_activity_home">Odoo Contacts</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="unable_to_connect_odoo">nable to connect with odoo server</string>
+
+    <string name="searh_title">Search</string>
+    <string name="search_title">searchbar</string>
 </resources>
+
+

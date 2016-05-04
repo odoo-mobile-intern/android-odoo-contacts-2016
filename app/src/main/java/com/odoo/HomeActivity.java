@@ -1,5 +1,7 @@
 package com.odoo;
 
+import android.app.SearchManager;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
@@ -8,6 +10,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -15,21 +18,42 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-
 public class HomeActivity extends AppCompatActivity implements TabLayout.OnTabSelectedListener {
 
     private SectionsPagerAdapter mSectionsPagerAdapter;
 
     private ViewPager mViewPager;
     private TabLayout tabLayout;
+    private SearchView searchview;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+
+        //code for search
+        Intent intent = getIntent();
+        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+            String query = intent.getStringExtra(SearchManager.QUERY);
+            doMySearch(query);
+        }
+
+        searchview = (SearchView) findViewById(R.id.searchview1);
+        searchview.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // setSubmitButtonEnabled(true);
+                //setQueryRefinementEnabled(true)
+
+            }
+        });
+
 
         tabLayout = (TabLayout) findViewById(R.id.tab_layout);
         //code for tab
@@ -53,6 +77,9 @@ public class HomeActivity extends AppCompatActivity implements TabLayout.OnTabSe
             }
         });
 
+    }
+
+    private void doMySearch(String query) {
     }
 
 
@@ -148,5 +175,8 @@ public class HomeActivity extends AppCompatActivity implements TabLayout.OnTabSe
             }
             return null;
         }
+    }
+
+    public class JARGON {
     }
 }

@@ -2,16 +2,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
     android:orientation="vertical"
+    android:paddingLeft="8dp"
+    android:paddingRight="8dp"
+    android:background="#ffffff"
     tools:context="com.odoo.HomeActivity$PlaceholderFragment">
 
     <ListView
         android:id="@+id/contactList"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:divider="@color/colorPrimaryDark"
-        android:background="#90dfdfdf"
-        android:dividerHeight="0.8dp" />
+        android:dividerHeight="0.1dp"
+        android:divider="#aaaaaa"/>
 
 </LinearLayout>

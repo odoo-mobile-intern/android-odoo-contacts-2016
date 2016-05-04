@@ -106,6 +106,10 @@ public class LoginActivity extends AppCompatActivity implements IOdooLoginCallba
             public void onDatabasesLoad(List<String> list) {
                 if (list.size() > 1) {
                     // TODO: Show database selection dialog
+                    String username = edtUsername.getText().toString().trim();
+                    String password = edtPassword.getText().toString().trim();
+                    String database = list.get(0);
+                    odoo.authenticate(username, password, database, LoginActivity.this);
 
                 } else {
                     // auto select first database and login.

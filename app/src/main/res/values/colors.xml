@@ -10,4 +10,30 @@
     <color name="primaryText">#212121</color>
     <color name="secondaryText">#727272</color>
     <color name="colorDivider">#B6B6B6</color>
+
+    <color name="android_blue">#33B5E5</color>
+    <color name="android_blue_dark">#0099CC</color>
+    <color name="android_violet">#AA66CC</color>
+    <color name="android_violet_dark">#9933CC</color>
+    <color name="android_green">#99CC00</color>
+    <color name="android_green_dark">#669900</color>
+    <color name="android_orange">#FFBB33</color>
+    <color name="android_orange_dark">#FF8800</color>
+    <color name="android_red">#FF4444</color>
+    <color name="android_red_dark">#CC0000</color>
+
+
+    <array name="letter_tile_colors">
+        <item>@color/android_blue</item>
+        <item>@color/android_violet_dark</item>
+        <item>@color/android_red</item>
+        <item>@color/android_green_dark</item>
+        <item>@color/android_blue_dark</item>
+        <item>@color/android_orange</item>
+        <item>@color/android_red_dark</item>
+        <item>@color/android_violet</item>
+        <item>@color/android_green</item>
+        <item>@color/android_orange_dark</item>
+    </array>
+
 </resources>
