@@ -1,18 +1,16 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#ffffff"
     android:orientation="vertical"
     android:paddingLeft="8dp"
-    android:paddingRight="8dp"
-    android:background="#ffffff"
-    tools:context="com.odoo.HomeActivity$PlaceholderFragment">
+    android:paddingRight="8dp">
 
     <ListView
         android:id="@+id/contactList"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:dividerHeight="0.1dp"
-        android:divider="#aaaaaa"/>
+        android:divider="#aaaaaa"
+        android:dividerHeight="0.1dp" />
 
 </LinearLayout>

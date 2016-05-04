@@ -1,5 +1,9 @@
 package com.odoo;
 
+<<<<<<< Updated upstream
+=======
+import android.content.Intent;
+>>>>>>> Stashed changes
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -23,7 +27,7 @@ import com.odoo.table.ResPartner;
  * A simple {@link Fragment} subclass.
  */
 public class ContactFragment extends Fragment implements
-        LoaderManager.LoaderCallbacks<Cursor>, OListAdapter.OnViewBindListener {
+        LoaderManager.LoaderCallbacks<Cursor>, OListAdapter.OnViewBindListener, AdapterView.OnItemClickListener {
 
     private ResPartner resPartner;
     private OListAdapter oListAdapter;
@@ -47,6 +51,7 @@ public class ContactFragment extends Fragment implements
         oListAdapter = new OListAdapter(getContext(), null, R.layout.contact_list_item);
         oListAdapter.setOnViewBindListener(this);
         contactList.setAdapter(oListAdapter);
+        contactList.setOnItemClickListener(this);
 
         getLoaderManager().initLoader(0, null, this);
     }
@@ -81,6 +86,7 @@ public class ContactFragment extends Fragment implements
         textContactNumber.setText(stringMobile);
         textContactNumber.setVisibility(stringMobile.equals("false") ? View.GONE : View.VISIBLE);
 
+        //TODO: check company logo condition on company_type field.
         if (stringImage.equals("false")) {
             profileImage.setImageBitmap(BitmapUtils.getAlphabetImage(getContext(), stringName));
         } else {
@@ -104,4 +110,13 @@ public class ContactFragment extends Fragment implements
         oListAdapter.changeCursor(null);
     }
 
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        Cursor cr = (Cursor) oListAdapter.getItem(position);
+
+        Intent intent = new Intent(getActivity(), ContactDetailActivity.class);
+        intent.putExtra("id", cr.getInt(cr.getColumnIndex("_id")));
+        startActivity(intent);
+
+    }
 }
