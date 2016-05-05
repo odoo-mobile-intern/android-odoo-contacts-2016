@@ -7,31 +7,27 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 
-import com.odoo.orm.OModel;
+import com.odoo.table.ResPartner;
 
 public class ContactProvider extends ContentProvider {
     public static final String TAG = ContactProvider.class.getSimpleName();
-    public OModel oModel = null;
+    public ResPartner resPartner;
 
     @Override
     public boolean onCreate() {
+        resPartner = new ResPartner(getContext());
         return true;
     }
 
-    public void createDBObject(Uri uri) {
-        oModel = new OModel(getContext(), "res_partner") {
-        };
-    }
 
     @Override
     public Cursor query(Uri uri, String[] projection, String selection,
                         String[] selectionArgs, String sortOrder) {
-        createDBObject(uri);
         SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
         Cursor cr;
         queryBuilder.setTables("res_partner");
 
-        cr = queryBuilder.query(oModel.getReadableDatabase(), projection,
+        cr = queryBuilder.query(resPartner.getReadableDatabase(), projection,
                 selection, selectionArgs, null, null, sortOrder);
         Context ctx = getContext();
         assert ctx != null;
