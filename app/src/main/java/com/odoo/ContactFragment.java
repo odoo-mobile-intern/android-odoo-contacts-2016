@@ -2,6 +2,7 @@ package com.odoo;
 
 import android.content.Intent;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -95,7 +96,8 @@ public class ContactFragment extends Fragment implements
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        return new CursorLoader(getContext(), resPartner.uri(), null, null, null, null);
+        Uri uri = Uri.parse("content://com.odoo.contacts.res_partner/res_partner");
+        return new CursorLoader(getContext(), uri, null, null, null, null);
     }
 
     @Override

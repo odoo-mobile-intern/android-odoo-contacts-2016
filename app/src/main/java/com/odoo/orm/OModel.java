@@ -24,7 +24,6 @@ public abstract class OModel extends SQLiteOpenHelper implements BaseColumns {
     public static final String DB_NAME = "OdooContacts.db";
     public static final int DB_VERSION = 1;
     private Context mContext;
-    SQLiteDatabase mysqLiteDatabase;
     private String mModelName;
 
     OColumn _id = new OColumn("Local ID", ColumnType.INTEGER)
