@@ -16,13 +16,14 @@ import com.odoo.LoginActivity;
  */
 public class OdooAuthenticator extends AbstractAccountAuthenticator {
 
-    public static final String AUTH_TYPE="com.odoo.auth";
-    private Context mcontext;
+    public static final String AUTH_TYPE = "com.odoo.contacts.auth";
+    private Context mContext;
 
-    public OdooAuthenticator(Context context){
+    public OdooAuthenticator(Context context) {
         super(context);
-        mcontext=context;
+        mContext = context;
     }
+
     @Override
     public Bundle editProperties(AccountAuthenticatorResponse response, String accountType) {
         return null;
@@ -30,8 +31,8 @@ public class OdooAuthenticator extends AbstractAccountAuthenticator {
 
     @Override
     public Bundle addAccount(AccountAuthenticatorResponse response, String accountType, String authTokenType, String[] requiredFeatures, Bundle options) throws NetworkErrorException {
-        Bundle data=new Bundle();
-        data.putParcelable(AccountManager.KEY_INTENT,new Intent(mcontext, LoginActivity.class));
+        Bundle data = new Bundle();
+        data.putParcelable(AccountManager.KEY_INTENT, new Intent(mContext, LoginActivity.class));
 
         return data;
     }

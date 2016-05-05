@@ -1,4 +1,4 @@
-package com.odoo.database;
+package com.odoo.orm;
 
 import android.database.Cursor;
 
@@ -39,7 +39,8 @@ public class ListRow extends HashMap<String, Object> {
     }
 
     public String getString(String key) {
-        return containsKey(key) ? get(key) + " " : "false";
+        return containsKey(key) ? get(key) + "" : "false";
     }
+
 
 }

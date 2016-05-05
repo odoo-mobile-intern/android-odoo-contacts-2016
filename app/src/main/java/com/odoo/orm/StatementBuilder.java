@@ -1,14 +1,12 @@
-package com.odoo.database;
-
-import android.util.Log;
+package com.odoo.orm;
 
 /**
  * Created by sha on 25/4/16.
  */
 public class StatementBuilder {
-    private ContactDatabase mTable;
+    private OModel mTable;
 
-    public StatementBuilder(ContactDatabase table) {
+    public StatementBuilder(OModel table) {
         this.mTable = table;
     }
 
@@ -20,24 +18,24 @@ public class StatementBuilder {
                 .append(" (");
 
         StringBuffer columns = new StringBuffer();
-        for (ContactColumn column : mTable.getColumn().values()) {
-
-            columns.append(column.FieldName)
+        for (OColumn column : mTable.getColumns()) {
+            columns.append(column.name)
                     .append(" ")
                     .append(column.columnType.toString());
 
             if (column.primaryKey) {
                 columns.append(" PRIMARY KEY ");
             }
-            if (column.autoIncreament) {
+            if (column.autoIncrement) {
                 columns.append(" AUTOINCREMENT ");
             }
+            if (column.defValue != null) {
+                columns.append(" DEFAULT '").append(column.defValue.toString()).append("'");
+            }
             columns.append(" , ");
-
         }
-        String ColunmString = columns.toString();
-        sql.append(ColunmString.substring(0, ColunmString.length() - 2)).append(" )");
-        Log.e(">>> ", sql.toString());
+        String columnString = columns.toString();
+        sql.append(columnString.substring(0, columnString.length() - 2)).append(" )");
         return sql.toString();
     }
 }
