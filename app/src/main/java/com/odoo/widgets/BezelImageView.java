@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.odoo.orm.utils;
+package com.odoo.widgets;
 
 import android.content.Context;
 import android.content.res.TypedArray;

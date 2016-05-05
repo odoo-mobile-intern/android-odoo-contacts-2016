@@ -1,4 +1,4 @@
-package com.odoo.orm.utils;
+package com.odoo.utils;
 
 import android.content.Context;
 import android.content.res.Resources;

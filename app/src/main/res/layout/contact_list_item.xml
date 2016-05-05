@@ -8,7 +8,7 @@
     android:orientation="horizontal"
     android:padding="8dp">
 
-    <com.odoo.orm.utils.BezelImageView
+    <com.odoo.widgets.BezelImageView
         android:id="@+id/profile_image"
         android:layout_width="60dp"
         android:layout_height="60dp"

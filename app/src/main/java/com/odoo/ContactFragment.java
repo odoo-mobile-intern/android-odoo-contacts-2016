@@ -1,9 +1,6 @@
 package com.odoo;
 
-<<<<<<< Updated upstream
-=======
 import android.content.Intent;
->>>>>>> Stashed changes
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -14,14 +11,15 @@ import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.odoo.orm.ListRow;
 import com.odoo.orm.OListAdapter;
-import com.odoo.orm.utils.BitmapUtils;
 import com.odoo.table.ResPartner;
+import com.odoo.utils.BitmapUtils;
 
 /**
  * A simple {@link Fragment} subclass.
