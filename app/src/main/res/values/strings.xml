@@ -15,6 +15,11 @@
 
     <string name="searh_title">Search</string>
     <string name="search_title">searchbar</string>
+    <string name="save">Save</string>
+    <string name="new_contact_create">Contact Created</string>
+    <string name="call">Call</string>
+    <string name="add_contact_to_device">Add to Device Contact</string>
+    <string name="delete_contact">Delete</string>
+    <string name="send_message">Send message</string>
+    <string name="send_mail">Send mail</string>
 </resources>
-
-

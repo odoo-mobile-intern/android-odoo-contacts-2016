@@ -16,6 +16,7 @@ import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import com.odoo.orm.ListRow;
 import com.odoo.orm.OListAdapter;
@@ -26,11 +27,13 @@ import com.odoo.utils.BitmapUtils;
  * A simple {@link Fragment} subclass.
  */
 public class ContactFragment extends Fragment implements
-        LoaderManager.LoaderCallbacks<Cursor>, OListAdapter.OnViewBindListener, AdapterView.OnItemClickListener {
+        LoaderManager.LoaderCallbacks<Cursor>, OListAdapter.OnViewBindListener,
+        AdapterView.OnItemClickListener {
 
     private ResPartner resPartner;
     private OListAdapter oListAdapter;
     private ListView contactList;
+    private ToggleButton toggleFavourite;
 
     public ContactFragment() {
     }
@@ -51,7 +54,6 @@ public class ContactFragment extends Fragment implements
         oListAdapter.setOnViewBindListener(this);
         contactList.setAdapter(oListAdapter);
         contactList.setOnItemClickListener(this);
-
         getLoaderManager().initLoader(0, null, this);
     }
 
@@ -59,21 +61,23 @@ public class ContactFragment extends Fragment implements
     public void onViewBind(View view, Cursor cursor, ListRow row) {
 
         TextView textContactName, textContactEmail, textContactCity, textContactNumber;
-        ImageView profileImage;
+        ImageView profileImage, isCompany;
 
         textContactName = (TextView) view.findViewById(R.id.textViewName);
         textContactEmail = (TextView) view.findViewById(R.id.textViewEmail);
         textContactCity = (TextView) view.findViewById(R.id.textViewCity);
         textContactNumber = (TextView) view.findViewById(R.id.textViewContact);
         profileImage = (ImageView) view.findViewById(R.id.profile_image);
+        isCompany = (ImageView) view.findViewById(R.id.isCompany);
 
-        String stringName, stringEmail, stringCity, stringMobile, stringImage;
+        String stringName, stringEmail, stringCity, stringMobile, stringImage, stringCompanyType;
 
         stringName = row.getString("name");
         stringEmail = row.getString("email");
         stringCity = row.getString("city");
         stringMobile = row.getString("mobile");
         stringImage = row.getString("image_medium");
+        stringCompanyType = row.getString("company_type");
 
         textContactName.setText(stringName);
         textContactEmail.setText(stringEmail);
@@ -85,7 +89,8 @@ public class ContactFragment extends Fragment implements
         textContactNumber.setText(stringMobile);
         textContactNumber.setVisibility(stringMobile.equals("false") ? View.GONE : View.VISIBLE);
 
-        //TODO: check company logo condition on company_type field.
+        isCompany.setVisibility(stringCompanyType.equals("person") ? View.GONE : View.VISIBLE);
+
         if (stringImage.equals("false")) {
             profileImage.setImageBitmap(BitmapUtils.getAlphabetImage(getContext(), stringName));
         } else {
