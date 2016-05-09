@@ -22,6 +22,8 @@ public class ResPartner extends OModel {
     OColumn fax = new OColumn("Fax", ColumnType.VARCHAR);
     OColumn email = new OColumn("Email", ColumnType.VARCHAR);
     OColumn image_medium = new OColumn("Image", ColumnType.BLOB);
+    OColumn isFavourite = new OColumn("isFavourite", ColumnType.BOOLEAN); // local column
+
 
     public ResPartner(Context context) {
         super(context, "res.partner");

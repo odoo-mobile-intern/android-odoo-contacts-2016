@@ -107,7 +107,6 @@ public class ContactDetailActivity extends AppCompatActivity implements View.OnC
                 stringStateName = "false";
                 stringCountryName = "false";
 
-
                 collapsingToolbarLayout.setTitle(row.getString("name"));
                 //contact number
                 textMobileNumber.setText(stringMobileNumber);

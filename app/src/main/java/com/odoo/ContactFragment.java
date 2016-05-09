@@ -1,5 +1,6 @@
 package com.odoo;
 
+import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -13,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -28,7 +30,7 @@ import com.odoo.utils.BitmapUtils;
  */
 public class ContactFragment extends Fragment implements
         LoaderManager.LoaderCallbacks<Cursor>, OListAdapter.OnViewBindListener,
-        AdapterView.OnItemClickListener {
+        AdapterView.OnItemClickListener, CompoundButton.OnCheckedChangeListener {
 
     private ResPartner resPartner;
     private OListAdapter oListAdapter;
@@ -54,6 +56,16 @@ public class ContactFragment extends Fragment implements
         oListAdapter.setOnViewBindListener(this);
         contactList.setAdapter(oListAdapter);
         contactList.setOnItemClickListener(this);
+
+        toggleFavourite = (ToggleButton) view.findViewById(R.id.toggleIsFavourite);
+        toggleFavourite.setOnCheckedChangeListener(this);
+
+        getLoaderManager().initLoader(0, null, this);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
         getLoaderManager().initLoader(0, null, this);
     }
 
@@ -123,5 +135,19 @@ public class ContactFragment extends Fragment implements
         intent.putExtra("id", cr.getInt(cr.getColumnIndex("_id")));
         startActivity(intent);
 
+    }
+
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+        //TODO : get contact id to update
+
+        ContentValues values = new ContentValues();
+
+        if (toggleFavourite.isChecked()) {
+
+        } else {
+
+        }
     }
 }
