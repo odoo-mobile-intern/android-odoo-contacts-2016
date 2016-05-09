@@ -4,14 +4,15 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center"
+    android:background="@android:color/white"
     tools:context="com.odoo.FavouriteFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:id="@+id/section_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Favourite Contacts"
-        android:textSize="24sp" />
+    <ListView
+        android:id="@+id/favouriteList"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:divider="#aaaaaa"
+        android:dividerHeight="0.1dp"/>
 
 </LinearLayout>
