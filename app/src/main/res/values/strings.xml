@@ -22,4 +22,6 @@
     <string name="delete_contact">Delete</string>
     <string name="send_message">Send message</string>
     <string name="send_mail">Send mail</string>
+    <string name="contact_created">Contact created</string>
+    <string name="label_view">View</string>
 </resources>

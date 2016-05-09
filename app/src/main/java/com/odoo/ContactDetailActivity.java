@@ -15,7 +15,9 @@ import android.provider.ContactsContract;
 import android.provider.ContactsContract.CommonDataKinds.Phone;
 import android.provider.ContactsContract.Contacts.Data;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
@@ -53,8 +55,6 @@ public class ContactDetailActivity extends AppCompatActivity implements View.OnC
     private ImageView profileImage, callImage;
     private LinearLayout contactNumberLayout, emailLayout, addressLayout, websiteLayout, faxLayout;
     private RelativeLayout mobileLayout, phoneLayout;
-    private LinearLayout editAddressLayout, editContactLayout, editEmailLayout, editWebsiteLayout,
-            editFaxLayout;
     private EditText editMobileNumber, editPhoneNumber, editCity, editEmail, editState, editCountry,
             editPincode, editWebsite, editFax, editStreet, editStreet2;
     private String stringName, stringMobileNumber, stringPhoneNumber, stringEmail, stringStreet, stringStreet2,
@@ -62,6 +62,8 @@ public class ContactDetailActivity extends AppCompatActivity implements View.OnC
             stringCountryName, stringWebsite, stringFax, stringImage;
     private int _id;
     private String address;
+    private CoordinatorLayout coordinatorLayout;
+    private LinearLayout viewLayout, editLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +74,8 @@ public class ContactDetailActivity extends AppCompatActivity implements View.OnC
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
+
+        coordinatorLayout = (CoordinatorLayout) findViewById(R.id.rootLayout);
 
         collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.profile_collapsing);
 
@@ -86,100 +90,98 @@ public class ContactDetailActivity extends AppCompatActivity implements View.OnC
         _id = getIntent().getIntExtra("id", 0);
         resPartner = new ResPartner(this);
         List<ListRow> rows = resPartner.select("_id = ?", String.valueOf(_id));
-        if (rows != null) {
-            for (ListRow row : rows) {
+        for (ListRow row : rows) {
 
-                stringName = row.getString("name");
-                stringMobileNumber = row.getString("mobile");
-                stringPhoneNumber = row.getString("phone");
-                stringEmail = row.getString("email");
-                stringStreet = row.getString("street");
-                stringStreet2 = row.getString("street2");
-                stringCity = row.getString("city");
-                stringPincode = row.getString("zip");
-                stringStateId = row.getString("state_id");
-                stringCountryId = row.getString("country_id");
-                stringFax = row.getString("fax");
-                stringWebsite = row.getString("website");
-                stringImage = row.getString("image_medium");
+            stringName = row.getString("name");
+            stringMobileNumber = row.getString("mobile");
+            stringPhoneNumber = row.getString("phone");
+            stringEmail = row.getString("email");
+            stringStreet = row.getString("street");
+            stringStreet2 = row.getString("street2");
+            stringCity = row.getString("city");
+            stringPincode = row.getString("zip");
+            stringStateId = row.getString("state_id");
+            stringCountryId = row.getString("country_id");
+            stringFax = row.getString("fax");
+            stringWebsite = row.getString("website");
+            stringImage = row.getString("image_medium");
 
-                //TODO: state_name and Country_name from id
-                stringStateName = "false";
-                stringCountryName = "false";
+            //TODO: state_name and Country_name from id
+            stringStateName = "false";
+            stringCountryName = "false";
 
-                collapsingToolbarLayout.setTitle(row.getString("name"));
-                //contact number
-                textMobileNumber.setText(stringMobileNumber);
-                if (stringMobileNumber.equals("false") && !stringPhoneNumber.equals("false")) {
-                    mobileLayout.setVisibility(View.GONE);
-                    callImage.setVisibility(View.VISIBLE);
-                }
-
-                if (stringMobileNumber.equals("false")) {
-                    mobileLayout.setVisibility(View.GONE);
-                }
-
-                textPhoneNumber.setText(stringPhoneNumber);
-                if (stringPhoneNumber.equals("false")) {
-                    phoneLayout.setVisibility(View.GONE);
-                }
-
-                if (stringMobileNumber.equals("false") && stringPhoneNumber.equals("false")) {
-                    contactNumberLayout.setVisibility(View.GONE);
-                }
-
-                //email
-                textEmail.setText(stringEmail);
-                if (stringEmail.equals("false")) {
-                    emailLayout.setVisibility(View.GONE);
-                }
-
-                //address
-                textStreet.setText(stringStreet);
-                textStreet.setVisibility(stringStreet.equals("false") ? View.GONE : View.VISIBLE);
-
-                textStreet2.setText(stringStreet2);
-                textStreet2.setVisibility(stringStreet2.equals("false") ? View.GONE : View.VISIBLE);
-
-                textCity.setText(stringCity);
-                textCity.setVisibility(stringCity.equals("false") ? View.GONE : View.VISIBLE);
-
-                textPincode.setText(stringPincode);
-                textPincode.setVisibility(stringPincode.equals("false") ? View.GONE : View.VISIBLE);
-
-                textState.setText(stringStateId);
-                textState.setVisibility(stringStateId.equals("0") ? View.GONE : View.VISIBLE);
-
-                textCountry.setText(stringCountryId);
-                textCountry.setVisibility(stringCountryId.equals("0") ? View.GONE : View.VISIBLE);
-
-                if (stringStreet.equals("false") && stringStreet2.equals("false") &&
-                        stringCity.equals("false") && stringPincode.equals("false") &&
-                        stringStateId.equals("0") && stringCountryId.equals("0")) {
-                    addressLayout.setVisibility(View.GONE);
-                }
-
-                //website
-                textWebsite.setText(stringWebsite);
-                if (stringWebsite.equals("false")) {
-                    websiteLayout.setVisibility(View.GONE);
-                }
-
-                //fax
-                textFax.setText(stringFax);
-                if (stringFax.equals("false")) {
-                    faxLayout.setVisibility(View.GONE);
-                }
-
-                //profile image
-                if (!stringImage.equals("false")) {
-                    profileImage.setImageBitmap(BitmapUtils.getBitmapImage(this, stringImage));
-                } else {
-                    profileImage.setImageBitmap(BitmapUtils.getAlphabetImage(this,
-                            row.getString("name")));
-                }
-
+            collapsingToolbarLayout.setTitle(row.getString("name"));
+            //contact number
+            textMobileNumber.setText(stringMobileNumber);
+            if (stringMobileNumber.equals("false") && !stringPhoneNumber.equals("false")) {
+                mobileLayout.setVisibility(View.GONE);
+                callImage.setVisibility(View.VISIBLE);
             }
+
+            if (stringMobileNumber.equals("false")) {
+                mobileLayout.setVisibility(View.GONE);
+            }
+
+            textPhoneNumber.setText(stringPhoneNumber);
+            if (stringPhoneNumber.equals("false")) {
+                phoneLayout.setVisibility(View.GONE);
+            }
+
+            if (stringMobileNumber.equals("false") && stringPhoneNumber.equals("false")) {
+                contactNumberLayout.setVisibility(View.GONE);
+            }
+
+            //email
+            textEmail.setText(stringEmail);
+            if (stringEmail.equals("false")) {
+                emailLayout.setVisibility(View.GONE);
+            }
+
+            //address
+            textStreet.setText(stringStreet);
+            textStreet.setVisibility(stringStreet.equals("false") ? View.GONE : View.VISIBLE);
+
+            textStreet2.setText(stringStreet2);
+            textStreet2.setVisibility(stringStreet2.equals("false") ? View.GONE : View.VISIBLE);
+
+            textCity.setText(stringCity);
+            textCity.setVisibility(stringCity.equals("false") ? View.GONE : View.VISIBLE);
+
+            textPincode.setText(stringPincode);
+            textPincode.setVisibility(stringPincode.equals("false") ? View.GONE : View.VISIBLE);
+
+            textState.setText(stringStateId);
+            textState.setVisibility(stringStateId.equals("0") ? View.GONE : View.VISIBLE);
+
+            textCountry.setText(stringCountryId);
+            textCountry.setVisibility(stringCountryId.equals("0") ? View.GONE : View.VISIBLE);
+
+            if (stringStreet.equals("false") && stringStreet2.equals("false") &&
+                    stringCity.equals("false") && stringPincode.equals("false") &&
+                    stringStateId.equals("0") && stringCountryId.equals("0")) {
+                addressLayout.setVisibility(View.GONE);
+            }
+
+            //website
+            textWebsite.setText(stringWebsite);
+            if (stringWebsite.equals("false")) {
+                websiteLayout.setVisibility(View.GONE);
+            }
+
+            //fax
+            textFax.setText(stringFax);
+            if (stringFax.equals("false")) {
+                faxLayout.setVisibility(View.GONE);
+            }
+
+            //profile image
+            if (!stringImage.equals("false")) {
+                profileImage.setImageBitmap(BitmapUtils.getBitmapImage(this, stringImage));
+            } else {
+                profileImage.setImageBitmap(BitmapUtils.getAlphabetImage(this,
+                        row.getString("name")));
+            }
+
         }
     }
 
@@ -206,14 +208,11 @@ public class ContactDetailActivity extends AppCompatActivity implements View.OnC
         websiteLayout = (LinearLayout) findViewById(R.id.websiteLayout);
         faxLayout = (LinearLayout) findViewById(R.id.faxLayout);
 
+        viewLayout = (LinearLayout) findViewById(R.id.viewLayout);
+        editLayout = (LinearLayout) findViewById(R.id.editLayout);
+
         mobileLayout = (RelativeLayout) findViewById(R.id.mobileLayout);
         phoneLayout = (RelativeLayout) findViewById(R.id.phoneLayout);
-
-        editAddressLayout = (LinearLayout) findViewById(R.id.editAddressLayout);
-        editContactLayout = (LinearLayout) findViewById(R.id.editContactLayout);
-        editEmailLayout = (LinearLayout) findViewById(R.id.editEmailLayout);
-        editWebsiteLayout = (LinearLayout) findViewById(R.id.editWebsiteLayout);
-        editFaxLayout = (LinearLayout) findViewById(R.id.editFaxLayout);
 
         editMobileNumber = (EditText) findViewById(R.id.editMobileNumber);
         editPhoneNumber = (EditText) findViewById(R.id.editPhoneNumber);
@@ -235,17 +234,9 @@ public class ContactDetailActivity extends AppCompatActivity implements View.OnC
         if (v.getId() == R.id.fabEdit) {
 
             fabEdit.setImageResource(R.drawable.ic_done_24dp);
-            editAddressLayout.setVisibility(View.VISIBLE);
-            editContactLayout.setVisibility(View.VISIBLE);
-            editEmailLayout.setVisibility(View.VISIBLE);
-            editWebsiteLayout.setVisibility(View.VISIBLE);
-            editFaxLayout.setVisibility(View.VISIBLE);
 
-            addressLayout.setVisibility(View.GONE);
-            contactNumberLayout.setVisibility(View.GONE);
-            emailLayout.setVisibility(View.GONE);
-            websiteLayout.setVisibility(View.GONE);
-            faxLayout.setVisibility(View.GONE);
+            viewLayout.setVisibility(View.GONE);
+            editLayout.setVisibility(View.VISIBLE);
 
             editMobileNumber.setText(stringMobileNumber.equals("false") ? "" : stringMobileNumber);
             editPhoneNumber.setText(stringPhoneNumber.equals("false") ? "" : stringPhoneNumber);
@@ -278,8 +269,6 @@ public class ContactDetailActivity extends AppCompatActivity implements View.OnC
     }
 
     private void updateRecords() {
-
-        //TODO : FIX = sometime listview not update when updating records
 
         ContentValues values = new ContentValues();
 
@@ -351,7 +340,6 @@ public class ContactDetailActivity extends AppCompatActivity implements View.OnC
             values.put("zip", editPincode.getText().toString());
         }
 
-
         resPartner.update(values, "_id = ? ", String.valueOf(_id));
         Toast.makeText(ContactDetailActivity.this, "Contact Updated", Toast.LENGTH_SHORT).show();
     }
@@ -411,71 +399,73 @@ public class ContactDetailActivity extends AppCompatActivity implements View.OnC
 
         int id = item.getItemId();
 
-        if (id == android.R.id.home) {
-            finish();
-        }
+        switch (id) {
+            case android.R.id.home:
+                finish();
+                break;
 
-        if (id == R.id.menu_call) {
-
-            if (stringMobileNumber.equals("false")) {
-                if (stringPhoneNumber.equals("false")) {
-                    Toast.makeText(this, "Number not found", Toast.LENGTH_LONG).show();
+            case R.id.menu_call:
+                if (stringMobileNumber.equals("false")) {
+                    if (stringPhoneNumber.equals("false")) {
+                        Toast.makeText(this, "Number not found", Toast.LENGTH_LONG).show();
+                    } else {
+                        callToContact(stringPhoneNumber);
+                    }
                 } else {
-                    callToContact(stringPhoneNumber);
+                    callToContact(stringMobileNumber);
                 }
-            } else {
-                callToContact(stringMobileNumber);
-            }
-        }
+                break;
 
-        if (id == R.id.menu_add_contact_to_device) {
+            case R.id.menu_add_contact_to_device:
+                stringImage = stringImage.equals("false") ? "" : stringImage;
+                stringMobileNumber = stringMobileNumber.equals("false") ? "" : stringMobileNumber;
+                stringPhoneNumber = stringPhoneNumber.equals("false") ? "" : stringPhoneNumber;
+                stringEmail = stringEmail.equals("false") ? "" : stringEmail;
+                stringStreet = stringStreet.equals("false") ? "" : stringStreet;
+                stringStreet2 = stringStreet2.equals("false") ? "" : stringStreet2;
+                stringCity = stringCity.equals("false") ? "" : stringCity;
+                stringCountryName = stringCountryName.equals("false") ? "" : stringCountryName;
+                stringWebsite = stringWebsite.equals("false") ? "" : stringWebsite;
+                stringFax = stringFax.equals("false") ? "" : stringFax;
+                stringPincode = stringPincode.equals("false") ? "" : stringPincode;
 
-            stringImage = stringImage.equals("false") ? "" : stringImage;
-            stringMobileNumber = stringMobileNumber.equals("false") ? "" : stringMobileNumber;
-            stringPhoneNumber = stringPhoneNumber.equals("false") ? "" : stringPhoneNumber;
-            stringEmail = stringEmail.equals("false") ? "" : stringEmail;
-            stringStreet = stringStreet.equals("false") ? "" : stringStreet;
-            stringStreet2 = stringStreet2.equals("false") ? "" : stringStreet2;
-            stringCity = stringCity.equals("false") ? "" : stringCity;
-            stringCountryName = stringCountryName.equals("false") ? "" : stringCountryName;
-            stringWebsite = stringWebsite.equals("false") ? "" : stringWebsite;
-            stringFax = stringFax.equals("false") ? "" : stringFax;
-            stringPincode = stringPincode.equals("false") ? "" : stringPincode;
+                addContactToDevice(stringName, stringImage, stringMobileNumber, stringPhoneNumber, stringEmail,
+                        stringStreet, stringStreet2, stringCity, stringCountryName, stringFax,
+                        stringWebsite, stringPincode);
 
-            addContactToDevice(stringName, stringImage, stringMobileNumber, stringPhoneNumber, stringEmail,
-                    stringStreet, stringStreet2, stringCity, stringCountryName, stringFax,
-                    stringWebsite, stringPincode);
-        }
+                break;
 
-        if (id == R.id.menu_send_mail) {
-            if (stringEmail.equals("false")) {
-                Toast.makeText(this, "Email not found", Toast.LENGTH_LONG).show();
-            } else {
-                Intent mailIntent = new Intent(Intent.ACTION_SEND);
-                mailIntent.setData(Uri.parse("mailto:"));
-                mailIntent.setType("text/plain");
-                mailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{stringEmail});
-                startActivity(mailIntent);
-            }
-        }
-
-        if (id == R.id.menu_send_message) {
-            if (stringMobileNumber.equals("false")) {
-                if (stringPhoneNumber.equals("false")) {
-                    Toast.makeText(this, "Number not found", Toast.LENGTH_LONG).show();
+            case R.id.menu_send_message:
+                if (stringMobileNumber.equals("false")) {
+                    if (stringPhoneNumber.equals("false")) {
+                        Toast.makeText(this, "Number not found", Toast.LENGTH_LONG).show();
+                    } else {
+                        sendMessage(stringPhoneNumber);
+                    }
                 } else {
-                    sendMessage(stringPhoneNumber);
+                    sendMessage(stringMobileNumber);
                 }
-            } else {
-                sendMessage(stringMobileNumber);
-            }
+                break;
+
+            case R.id.menu_send_mail:
+                if (stringEmail.equals("false")) {
+                    Toast.makeText(this, "Email not found", Toast.LENGTH_LONG).show();
+                } else {
+                    Intent mailIntent = new Intent(Intent.ACTION_SEND);
+                    mailIntent.setData(Uri.parse("mailto:"));
+                    mailIntent.setType("text/plain");
+                    mailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{stringEmail});
+                    startActivity(mailIntent);
+                }
+                break;
+
+            case R.id.menu_delete:
+                resPartner.delete("_id = ? ", String.valueOf(_id));
+                Toast.makeText(ContactDetailActivity.this, "Contact Deleted", Toast.LENGTH_LONG).show();
+                finish();
+                break;
         }
 
-        if (id == R.id.menu_delete) {
-            resPartner.delete("_id = ? ", String.valueOf(_id));
-            Toast.makeText(ContactDetailActivity.this, "Contact Deleted", Toast.LENGTH_LONG).show();
-            finish();
-        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -597,12 +587,22 @@ public class ContactDetailActivity extends AppCompatActivity implements View.OnC
         try {
             ContentProviderResult[] res = this.getContentResolver().applyBatch(
                     ContactsContract.AUTHORITY, ops);
+            if (res.length > 0) {
+                final ContentProviderResult result = res[0];
+                Snackbar.make(coordinatorLayout, R.string.contact_created, Snackbar.LENGTH_LONG)
+                        .setAction(R.string.label_view, new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent intent = new Intent(Intent.ACTION_VIEW, result.uri);
+                                startActivity(intent);
+                            }
+                        }).show();
+
+            }
         } catch (RemoteException | OperationApplicationException e) {
             e.printStackTrace();
         }
-        Toast.makeText(this, "Contact Saved", Toast.LENGTH_SHORT).show();
     }
-
 
     public void sendMessage(String number) {
         Intent smsIntent = new Intent(Intent.ACTION_VIEW);

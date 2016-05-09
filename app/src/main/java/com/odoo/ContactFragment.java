@@ -10,6 +10,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +23,7 @@ import android.widget.ToggleButton;
 
 import com.odoo.orm.ListRow;
 import com.odoo.orm.OListAdapter;
+import com.odoo.orm.OModel;
 import com.odoo.table.ResPartner;
 import com.odoo.utils.BitmapUtils;
 
@@ -30,12 +32,11 @@ import com.odoo.utils.BitmapUtils;
  */
 public class ContactFragment extends Fragment implements
         LoaderManager.LoaderCallbacks<Cursor>, OListAdapter.OnViewBindListener,
-        AdapterView.OnItemClickListener, CompoundButton.OnCheckedChangeListener {
+        AdapterView.OnItemClickListener {
 
     private ResPartner resPartner;
     private OListAdapter oListAdapter;
     private ListView contactList;
-    private ToggleButton toggleFavourite;
 
     public ContactFragment() {
     }
@@ -57,9 +58,6 @@ public class ContactFragment extends Fragment implements
         contactList.setAdapter(oListAdapter);
         contactList.setOnItemClickListener(this);
 
-        toggleFavourite = (ToggleButton) view.findViewById(R.id.toggleIsFavourite);
-        toggleFavourite.setOnCheckedChangeListener(this);
-
         getLoaderManager().initLoader(0, null, this);
     }
 
@@ -75,6 +73,8 @@ public class ContactFragment extends Fragment implements
         TextView textContactName, textContactEmail, textContactCity, textContactNumber;
         ImageView profileImage, isCompany;
 
+        final ToggleButton toggleFavourite = (ToggleButton) view.findViewById(R.id.toggleIsFavourite);
+
         textContactName = (TextView) view.findViewById(R.id.textViewName);
         textContactEmail = (TextView) view.findViewById(R.id.textViewEmail);
         textContactCity = (TextView) view.findViewById(R.id.textViewCity);
@@ -82,14 +82,17 @@ public class ContactFragment extends Fragment implements
         profileImage = (ImageView) view.findViewById(R.id.profile_image);
         isCompany = (ImageView) view.findViewById(R.id.isCompany);
 
-        String stringName, stringEmail, stringCity, stringMobile, stringImage, stringCompanyType;
-
+        String stringName, stringEmail, stringCity, stringMobile, stringImage, stringCompanyType,
+                stringToggle;
+        final int _id = row.getInt(OModel._ID);
         stringName = row.getString("name");
         stringEmail = row.getString("email");
         stringCity = row.getString("city");
         stringMobile = row.getString("mobile");
         stringImage = row.getString("image_medium");
         stringCompanyType = row.getString("company_type");
+        stringToggle = row.getString("isFavourite");
+
 
         textContactName.setText(stringName);
         textContactEmail.setText(stringEmail);
@@ -109,6 +112,30 @@ public class ContactFragment extends Fragment implements
             profileImage.setImageBitmap(BitmapUtils.getBitmapImage(getContext(),
                     stringImage));
         }
+
+        if (stringToggle.equals("false")) {
+            toggleFavourite.setChecked(false);
+        } else {
+            toggleFavourite.setChecked(true);
+        }
+        toggleFavourite.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                Log.v(">>>", "ID" + _id);
+
+                ContentValues values = new ContentValues();
+
+                if (toggleFavourite.isChecked()) {
+                    values.put("isFavourite", "true");
+                    Log.v(">>>", "ID" + _id + " updated with true");
+
+                } else {
+                    values.put("isFavourite", "false");
+                    Log.v(">>>", "ID" + _id + " updated with false");
+                }
+                resPartner.update(values, "_id = ? ", String.valueOf(_id));
+            }
+        });
     }
 
     @Override
@@ -129,6 +156,7 @@ public class ContactFragment extends Fragment implements
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
         Cursor cr = (Cursor) oListAdapter.getItem(position);
 
         Intent intent = new Intent(getActivity(), ContactDetailActivity.class);
@@ -137,17 +165,4 @@ public class ContactFragment extends Fragment implements
 
     }
 
-    @Override
-    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
-        //TODO : get contact id to update
-
-        ContentValues values = new ContentValues();
-
-        if (toggleFavourite.isChecked()) {
-
-        } else {
-
-        }
-    }
 }
