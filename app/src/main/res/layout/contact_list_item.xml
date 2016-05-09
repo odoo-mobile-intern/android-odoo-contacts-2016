@@ -78,8 +78,10 @@
             android:background="@drawable/toggle_selector"
             android:backgroundTint="@color/colorAccent"
             android:checked="false"
+            android:focusable="false"
             android:textOff=""
             android:textOn="" />
 
     </LinearLayout>
+
 </LinearLayout>
