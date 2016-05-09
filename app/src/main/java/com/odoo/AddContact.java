@@ -24,7 +24,7 @@ public class AddContact extends AppCompatActivity implements View.OnClickListene
     private Toolbar toolbar;
     private EditText editName, editMobileNumber, editPhoneNumber, editCity, editEmail, editState, editCountry,
             editPincode, editWebsite, editFax, editStreet, editStreet2;
-    private String imageString;
+    private String imageString = "null";
     private ResPartner resPartner;
     private ImageView profileImage;
     private CheckBox checkBoxIsCompany;
@@ -85,7 +85,12 @@ public class AddContact extends AppCompatActivity implements View.OnClickListene
             ContentValues values = new ContentValues();
 
             values.put("name", editName.getText().toString());
-            values.put("image_medium", imageString);
+
+            if (imageString.equals("") || imageString.equals("null")) {
+                values.put("image_medium", "false");
+            } else {
+                values.put("image_medium", imageString);
+            }
 
             if (checkBoxIsCompany.isChecked()) {
                 values.put("company_type", "company");

@@ -4,7 +4,7 @@
 
     <item
         android:id="@+id/menu_call"
-        android:icon="@drawable/ic_call_black_24dp"
+        android:icon="@drawable/ic_call_24dp"
         android:title="@string/call"
         app:showAsAction="always" />
 

@@ -235,7 +235,7 @@ public class ContactDetailActivity extends AppCompatActivity implements View.OnC
 
         if (v.getId() == R.id.fabEdit) {
 
-            fabEdit.setImageResource(R.drawable.ic_done_black_24dp);
+            fabEdit.setImageResource(R.drawable.ic_done_24dp);
             editAddressLayout.setVisibility(View.VISIBLE);
             editContactLayout.setVisibility(View.VISIBLE);
             editEmailLayout.setVisibility(View.VISIBLE);
@@ -449,10 +449,15 @@ public class ContactDetailActivity extends AppCompatActivity implements View.OnC
         }
 
         if (id == R.id.menu_send_mail) {
-            Intent mailIntent = new Intent(Intent.ACTION_SEND);
-            mailIntent.putExtra(Intent.EXTRA_EMAIL, stringEmail);
-            mailIntent.setType("message/rfc822");
-            startActivity(mailIntent);
+            if (stringEmail.equals("false")) {
+                Toast.makeText(this, "Email not found", Toast.LENGTH_LONG).show();
+            } else {
+                Intent mailIntent = new Intent(Intent.ACTION_SEND);
+                mailIntent.setData(Uri.parse("mailto:"));
+                mailIntent.setType("text/plain");
+                mailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{stringEmail});
+                startActivity(mailIntent);
+            }
         }
 
         if (id == R.id.menu_send_message) {
