@@ -2,10 +2,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:gravity="center"
-<<<<<<< HEAD
     android:background="@color/android_white"
+    android:gravity="center"
+    android:orientation="vertical"
     tools:context="com.odoo.FavouriteFragment">
 
     <ListView
@@ -14,17 +13,5 @@
         android:layout_height="match_parent"
         android:divider="#aaaaaa"
         android:dividerHeight="0.1dp" />
-=======
-    android:background="@android:color/white"
-    tools:context="com.odoo.FavouriteFragment">
-
-    <!-- TODO: Update blank fragment layout -->
-    <ListView
-        android:id="@+id/favouriteList"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:divider="#aaaaaa"
-        android:dividerHeight="0.1dp"/>
->>>>>>> [Add] new table RecentContact added
 
 </LinearLayout>
