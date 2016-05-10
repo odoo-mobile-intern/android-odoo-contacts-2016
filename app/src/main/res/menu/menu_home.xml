@@ -12,4 +12,13 @@
         android:orderInCategory="100"
         android:title="@string/action_settings"
         app:showAsAction="never" />
+
+    <item
+        android:id="@+id/menu_remove_fav_contact"
+        android:title="@string/remove_fav_contact"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/menu_remove_recent_contact"
+        android:title="@string/remove_recent_contact"
+        app:showAsAction="never" />
 </menu>
