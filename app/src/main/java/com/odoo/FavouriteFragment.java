@@ -92,9 +92,7 @@ public class FavouriteFragment extends Fragment implements OListAdapter.OnViewBi
             profileImage.setImageBitmap(BitmapUtils.getBitmapImage(getContext(),
                     stringImage));
         }
-
     }
-
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {

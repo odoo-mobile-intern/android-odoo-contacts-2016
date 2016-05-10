@@ -10,7 +10,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -121,17 +120,13 @@ public class ContactFragment extends Fragment implements
         toggleFavourite.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                Log.v(">>>", "ID" + _id);
-
                 ContentValues values = new ContentValues();
 
                 if (toggleFavourite.isChecked()) {
                     values.put("isFavourite", "true");
-                    Log.v(">>>", "ID" + _id + " updated with true");
 
                 } else {
                     values.put("isFavourite", "false");
-                    Log.v(">>>", "ID" + _id + " updated with false");
                 }
                 resPartner.update(values, "_id = ? ", String.valueOf(_id));
             }
