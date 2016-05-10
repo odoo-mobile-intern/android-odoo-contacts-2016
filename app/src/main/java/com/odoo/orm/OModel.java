@@ -128,6 +128,14 @@ public abstract class OModel extends SQLiteOpenHelper implements BaseColumns {
         return count;
     }
 
+    public int delete(String where,String... args) {
+       SQLiteDatabase db = getWritableDatabase();
+        int count = db.delete(getTableName(),where,args);
+        db.close();
+        return count;
+    }
+
+
     public int count() {
         int count = 0;
         Cursor cr = null;

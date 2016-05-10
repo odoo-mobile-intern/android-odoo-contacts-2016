@@ -1,0 +1,379 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/android_white"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/profile_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:popupTheme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <com.odoo.widgets.BezelImageView
+                android:id="@+id/avatar"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:layout_marginTop="10dp"
+                android:src="@drawable/profilepic"
+                app:maskDrawable="@drawable/circle_bg_gray" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackground"
+                    android:padding="8dp">
+
+                    <ImageView
+                        android:id="@+id/editImageName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginRight="10dp"
+                        android:src="@drawable/ic_person"
+                        android:tint="@color/colorAccent" />
+
+                    <EditText
+                        android:id="@+id/editName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginStart="20dp"
+                        android:layout_toEndOf="@id/editImageName"
+                        android:layout_toRightOf="@id/editImageName"
+                        android:hint="Name"
+                        android:inputType="textEmailAddress"
+                        android:singleLine="true"
+                        android:textAppearance="@android:style/TextAppearance.Medium"
+                        android:textColorHint="#607D8B" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/editName"
+                    android:background="?attr/selectableItemBackground"
+                    android:padding="8dp">
+
+                    <ImageView
+                        android:id="@+id/imageCheckbox"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginRight="10dp"
+                        android:src="@drawable/ic_person"
+                        android:tint="@color/colorAccent"
+                        android:visibility="invisible" />
+
+                    <CheckBox
+                        android:id="@+id/checkboxIsCompany"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginStart="20dp"
+                        android:layout_toEndOf="@id/imageCheckbox"
+                        android:layout_toRightOf="@id/imageCheckbox"
+                        android:text="IsCompany"
+                        android:textAppearance="@android:style/TextAppearance.Medium"
+                        android:textColor="#000000" />
+                </RelativeLayout>
+
+                <include layout="@layout/item_divider" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackground"
+                    android:padding="8dp">
+
+                    <ImageView
+                        android:id="@+id/editImageCall"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginRight="10dp"
+                        android:src="@drawable/ic_call_24dp"
+                        android:tint="@color/colorAccent" />
+
+                    <EditText
+                        android:id="@+id/editMobileNumber"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginStart="20dp"
+                        android:layout_toEndOf="@id/editImageCall"
+                        android:layout_toRightOf="@id/editImageCall"
+                        android:hint="Mobile Number"
+                        android:inputType="number"
+                        android:singleLine="true"
+                        android:textAppearance="@android:style/TextAppearance.Medium"
+                        android:textColorHint="#607D8B" />
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackground"
+                    android:padding="8dp">
+
+                    <ImageView
+                        android:id="@+id/editImageCall2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginRight="10dp"
+                        android:src="@drawable/ic_call_24dp"
+                        android:tint="@color/colorAccent"
+                        android:visibility="invisible" />
+
+                    <EditText
+                        android:id="@+id/editPhoneNumber"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginStart="20dp"
+                        android:layout_toEndOf="@id/editImageCall2"
+                        android:layout_toRightOf="@id/editImageCall2"
+                        android:hint="Phone Number"
+                        android:inputType="number"
+                        android:singleLine="true"
+                        android:textAppearance="@android:style/TextAppearance.Medium"
+                        android:textColorHint="#607D8B" />
+
+                </RelativeLayout>
+
+                <include layout="@layout/item_divider" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackground"
+                    android:padding="8dp">
+
+                    <ImageView
+                        android:id="@+id/editImageEmail"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginRight="10dp"
+                        android:src="@drawable/ic_email_black_24dp"
+                        android:tint="@color/colorAccent" />
+
+                    <EditText
+                        android:id="@+id/editEmail"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginStart="20dp"
+                        android:layout_toEndOf="@id/editImageEmail"
+                        android:layout_toRightOf="@id/editImageEmail"
+                        android:hint="Email"
+                        android:inputType="textEmailAddress"
+                        android:singleLine="true"
+                        android:textAppearance="@android:style/TextAppearance.Medium"
+                        android:textColorHint="#607D8B" />
+                </RelativeLayout>
+
+                <include layout="@layout/item_divider" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackground"
+                    android:padding="8dp">
+
+                    <ImageView
+                        android:id="@+id/imageStreet2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginRight="10dp"
+                        android:src="@drawable/ic_place_black_24dp"
+                        android:tint="@color/colorAccent" />
+
+                    <EditText
+                        android:id="@+id/editStreet"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginStart="20dp"
+                        android:layout_toEndOf="@id/imageStreet2"
+                        android:layout_toRightOf="@id/imageStreet2"
+                        android:hint="Street"
+                        android:singleLine="true"
+                        android:textAppearance="@android:style/TextAppearance.Medium"
+                        android:textColorHint="#607D8B" />
+
+                    <EditText
+                        android:id="@+id/editStreet2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/editStreet"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginStart="20dp"
+                        android:layout_toEndOf="@id/imageStreet2"
+                        android:layout_toRightOf="@id/imageStreet2"
+                        android:hint="Street 2"
+                        android:singleLine="true"
+                        android:textAppearance="@android:style/TextAppearance.Medium"
+                        android:textColorHint="#607D8B" />
+
+                    <EditText
+                        android:id="@+id/editCity"
+                        android:layout_width="120dp"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/editStreet2"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginStart="20dp"
+                        android:layout_toEndOf="@id/imageStreet2"
+                        android:layout_toRightOf="@id/imageStreet2"
+                        android:hint="City"
+                        android:gravity="start"
+                        android:singleLine="true"
+                        android:textAppearance="@android:style/TextAppearance.Medium"
+                        android:textColorHint="#607D8B" />
+
+                    <EditText
+                        android:id="@+id/editPincode"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/editStreet2"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginStart="20dp"
+                        android:layout_toEndOf="@id/editCity"
+                        android:layout_toRightOf="@id/editCity"
+                        android:hint="Pincode"
+                        android:inputType="number"
+                        android:singleLine="true"
+                        android:textAppearance="@android:style/TextAppearance.Medium"
+                        android:textColorHint="#607D8B" />
+
+                    <EditText
+                        android:id="@+id/editState"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/editCity"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginStart="20dp"
+                        android:layout_toEndOf="@id/imageStreet2"
+                        android:layout_toRightOf="@id/imageStreet2"
+                        android:hint="State"
+                        android:singleLine="true"
+                        android:textAppearance="@android:style/TextAppearance.Medium"
+                        android:textColorHint="#607D8B" />
+
+                    <EditText
+                        android:id="@+id/editCountry"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/editState"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginStart="20dp"
+                        android:layout_toEndOf="@id/imageStreet2"
+                        android:layout_toRightOf="@id/imageStreet2"
+                        android:hint="Country"
+                        android:singleLine="true"
+                        android:textAppearance="@android:style/TextAppearance.Medium"
+                        android:textColorHint="#607D8B" />
+
+                </RelativeLayout>
+
+                <include layout="@layout/item_divider" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackground"
+                    android:padding="8dp">
+
+                    <ImageView
+                        android:id="@+id/editImageWeb"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginRight="10dp"
+                        android:src="@drawable/ic_public_universe"
+                        android:tint="@color/colorAccent" />
+
+                    <EditText
+                        android:id="@+id/editWebsite"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginStart="20dp"
+                        android:layout_toEndOf="@id/editImageWeb"
+                        android:layout_toRightOf="@id/editImageWeb"
+                        android:hint="Website"
+                        android:inputType="textWebEditText"
+                        android:singleLine="true"
+                        android:textAppearance="@android:style/TextAppearance.Medium"
+                        android:textColorHint="#607D8B" />
+
+                </RelativeLayout>
+
+                <include layout="@layout/item_divider" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackground"
+                    android:padding="8dp">
+
+                    <ImageView
+                        android:id="@+id/editImageFax"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginRight="10dp"
+                        android:src="@drawable/ic_fax_black_24dp"
+                        android:tint="@color/colorAccent" />
+
+                    <EditText
+                        android:id="@+id/editFax"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginStart="20dp"
+                        android:layout_toEndOf="@id/editImageFax"
+                        android:layout_toRightOf="@id/editImageFax"
+                        android:hint="Fax"
+                        android:inputType="number"
+                        android:singleLine="true"
+                        android:textAppearance="@android:style/TextAppearance.Medium"
+                        android:textColorHint="#607D8B" />
+
+                </RelativeLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
+</LinearLayout>

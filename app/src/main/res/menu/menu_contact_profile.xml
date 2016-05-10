@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/menu_call"
+        android:icon="@drawable/ic_call_24dp"
+        android:title="@string/call"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/menu_add_contact_to_device"
+        android:title="@string/add_contact_to_device"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/menu_send_message"
+        android:title="@string/send_message"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/menu_send_mail"
+        android:title="@string/send_mail"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/menu_delete"
+        android:title="@string/delete_contact"
+        app:showAsAction="never" />
+</menu>
