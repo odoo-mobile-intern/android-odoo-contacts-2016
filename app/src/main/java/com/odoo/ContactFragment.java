@@ -23,6 +23,7 @@ import android.widget.ToggleButton;
 import com.odoo.orm.ListRow;
 import com.odoo.orm.OListAdapter;
 import com.odoo.orm.OModel;
+import com.odoo.table.RecentContact;
 import com.odoo.table.ResPartner;
 import com.odoo.utils.BitmapUtils;
 
@@ -36,6 +37,7 @@ public class ContactFragment extends Fragment implements
     private ResPartner resPartner;
     private OListAdapter oListAdapter;
     private ListView contactList;
+    private RecentContact recentContact;
 
     public ContactFragment() {
     }
@@ -51,6 +53,7 @@ public class ContactFragment extends Fragment implements
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         resPartner = new ResPartner(getContext());
+        recentContact = new RecentContact(getContext());
         contactList = (ListView) view.findViewById(R.id.contactList);
         oListAdapter = new OListAdapter(getContext(), null, R.layout.contact_list_item);
         oListAdapter.setOnViewBindListener(this);
@@ -156,6 +159,11 @@ public class ContactFragment extends Fragment implements
 
         Intent intent = new Intent(getActivity(), ContactDetailActivity.class);
         intent.putExtra("id", cr.getInt(cr.getColumnIndex("_id")));
+
+        ContentValues values = new ContentValues();
+        values.put("contact_id", cr.getInt(cr.getColumnIndex("_id")));
+        recentContact.update_or_create(values, "contact_id = ? ", cr.getInt(cr.getColumnIndex("_id")) + "");
+
         startActivity(intent);
 
     }

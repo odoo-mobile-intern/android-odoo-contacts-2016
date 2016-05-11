@@ -4,6 +4,7 @@ import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.app.SearchManager;
 import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -23,7 +24,12 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.odoo.auth.OdooAuthenticator;
+import com.odoo.orm.ListRow;
 import com.odoo.orm.sync.ContactSyncAdapter;
+import com.odoo.table.RecentContact;
+import com.odoo.table.ResPartner;
+
+import java.util.List;
 
 public class HomeActivity extends AppCompatActivity implements TabLayout.OnTabSelectedListener {
 
@@ -32,6 +38,8 @@ public class HomeActivity extends AppCompatActivity implements TabLayout.OnTabSe
     private ViewPager mViewPager;
     private TabLayout tabLayout;
     private SearchView searchview;
+    private ResPartner resPartner;
+    private RecentContact recentContact;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +50,8 @@ public class HomeActivity extends AppCompatActivity implements TabLayout.OnTabSe
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        resPartner = new ResPartner(this);
+        recentContact = new RecentContact(this);
 
         //code for search
         Intent intent = getIntent();
@@ -107,6 +117,27 @@ public class HomeActivity extends AppCompatActivity implements TabLayout.OnTabSe
                     Toast.makeText(HomeActivity.this, "Sync started", Toast.LENGTH_SHORT).show();
                 }
                 break;
+            case R.id.menu_remove_fav_contact:
+                List<ListRow> rows = resPartner.select("isFavourite = ? ", new String[]{"true"});
+                ContentValues values = new ContentValues();
+                if (rows != null) {
+                    for (ListRow row : rows) {
+                        values.put("isFavourite", "false");
+                        resPartner.update(values, "isFavourite = ? ", new String[]{"true"});
+                    }
+                }
+                break;
+            case R.id.menu_remove_recent_contact:
+                List<ListRow> contactRows = recentContact.select();
+                int count = resPartner.count();
+                if (count > 0) {
+                    recentContact.delete(null);
+                } else {
+                    Toast.makeText(HomeActivity.this, "No any contact to remove", Toast.LENGTH_SHORT).show();
+                }
+
+                break;
+
         }
         return super.onOptionsItemSelected(item);
     }
