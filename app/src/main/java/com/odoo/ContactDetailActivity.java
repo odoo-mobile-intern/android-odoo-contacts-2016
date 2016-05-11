@@ -1,6 +1,8 @@
 package com.odoo;
 
 import android.Manifest;
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.content.ContentProviderOperation;
 import android.content.ContentProviderResult;
 import android.content.ContentValues;
@@ -32,6 +34,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.odoo.auth.OdooAuthenticator;
 import com.odoo.orm.ListRow;
 import com.odoo.table.ResCountry;
 import com.odoo.table.ResPartner;
@@ -478,8 +481,8 @@ public class ContactDetailActivity extends AppCompatActivity implements View.OnC
         int rawContactInsertIndex = 0;
 
         ops.add(ContentProviderOperation.newInsert(ContactsContract.RawContacts.CONTENT_URI)
-                .withValue(ContactsContract.RawContacts.ACCOUNT_TYPE, null)
-                .withValue(ContactsContract.RawContacts.ACCOUNT_NAME, null).build());
+                .withValue(ContactsContract.RawContacts.ACCOUNT_TYPE, OdooAuthenticator.AUTH_TYPE)
+                .withValue(ContactsContract.RawContacts.ACCOUNT_NAME, getAccount()).build());
 
         // Display name
         ops.add(ContentProviderOperation
@@ -622,5 +625,14 @@ public class ContactDetailActivity extends AppCompatActivity implements View.OnC
         } else {
             startActivity(dial);
         }
+    }
+
+    private Account getAccount() {
+        AccountManager accountManager = (AccountManager) getSystemService(ACCOUNT_SERVICE);
+        Account[] accounts = accountManager.getAccountsByType(OdooAuthenticator.AUTH_TYPE);
+        if (accounts.length == 1) {
+            return accounts[0];
+        }
+        return null;
     }
 }
