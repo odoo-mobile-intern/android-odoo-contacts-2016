@@ -1,6 +1,9 @@
 package com.odoo;
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.app.SearchManager;
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -17,6 +20,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
+
+import com.odoo.auth.OdooAuthenticator;
+import com.odoo.orm.sync.ContactSyncAdapter;
 
 public class HomeActivity extends AppCompatActivity implements TabLayout.OnTabSelectedListener {
 
@@ -25,7 +32,6 @@ public class HomeActivity extends AppCompatActivity implements TabLayout.OnTabSe
     private ViewPager mViewPager;
     private TabLayout tabLayout;
     private SearchView searchview;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,13 +50,12 @@ public class HomeActivity extends AppCompatActivity implements TabLayout.OnTabSe
             doMySearch(query);
         }
 
-        searchview = (SearchView) findViewById(R.id.searchview1);
+        searchview = (SearchView) findViewById(R.id.contactSearchView);
         searchview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // setSubmitButtonEnabled(true);
-                //setQueryRefinementEnabled(true)
-
+                // Redirecting to global contact search activity
+                startActivity(new Intent(HomeActivity.this, SearchContactActivity.class));
             }
         });
 
@@ -92,7 +97,17 @@ public class HomeActivity extends AppCompatActivity implements TabLayout.OnTabSe
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-
+        switch (id) {
+            case R.id.menu_sync:
+                AccountManager accountManager = (AccountManager) getSystemService(ACCOUNT_SERVICE);
+                Account[] accounts = accountManager.getAccountsByType(OdooAuthenticator.AUTH_TYPE);
+                if (accounts.length == 1) {
+                    ContentResolver.requestSync(accounts[0], ContactSyncAdapter.AUTHORITY,
+                            Bundle.EMPTY);
+                    Toast.makeText(HomeActivity.this, "Sync started", Toast.LENGTH_SHORT).show();
+                }
+                break;
+        }
         return super.onOptionsItemSelected(item);
     }
 

@@ -24,4 +24,6 @@
     <string name="send_mail">Send mail</string>
     <string name="contact_created">Contact created</string>
     <string name="label_view">View</string>
+    <string name="menu_sync_label">Sync Contacts</string>
+    <string name="hint_search_contact">Search contact</string>
 </resources>
