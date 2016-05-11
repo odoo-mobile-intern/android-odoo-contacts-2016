@@ -17,6 +17,7 @@ import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.odoo.orm.ListRow;
@@ -128,11 +129,14 @@ public class ContactFragment extends Fragment implements
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 ContentValues values = new ContentValues();
                 favToogleCache.put(row.getInt("_id"), toggleFavourite.isChecked());
+                String favString = " marked favourite";
                 if (toggleFavourite.isChecked()) {
                     values.put("isFavourite", "true");
                 } else {
+                    favString = " unmarked from favourite";
                     values.put("isFavourite", "false");
                 }
+                Toast.makeText(getContext(), "Contact " + favString, Toast.LENGTH_SHORT).show();
                 resPartner.update(values, "_id = ? ", String.valueOf(row.getInt("_id")));
                 getContext().getContentResolver().notifyChange(resPartner.uri(), null);
             }

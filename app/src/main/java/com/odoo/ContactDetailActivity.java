@@ -482,7 +482,7 @@ public class ContactDetailActivity extends AppCompatActivity implements View.OnC
 
         ops.add(ContentProviderOperation.newInsert(ContactsContract.RawContacts.CONTENT_URI)
                 .withValue(ContactsContract.RawContacts.ACCOUNT_TYPE, OdooAuthenticator.AUTH_TYPE)
-                .withValue(ContactsContract.RawContacts.ACCOUNT_NAME, getAccount()).build());
+                .withValue(ContactsContract.RawContacts.ACCOUNT_NAME, getAccount().name).build());
 
         // Display name
         ops.add(ContentProviderOperation
