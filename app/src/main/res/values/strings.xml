@@ -29,4 +29,6 @@
     <string name="remove_recent_contact">Remove recent contacts</string>
     <string name="hint_search_contact">Search contact</string>
     <string name="select_database">Select database</string>
+    <string name="please_wait">Please wait...</string>
+    <string name="login_in_progress">Login in progress</string>
 </resources>

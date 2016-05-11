@@ -2,6 +2,8 @@ package com.odoo;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
+import android.app.ProgressDialog;
+import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,6 +16,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.odoo.auth.OdooAuthenticator;
+import com.odoo.orm.sync.ContactSyncAdapter;
 
 import java.util.List;
 
@@ -31,7 +34,7 @@ public class LoginActivity extends AppCompatActivity implements IOdooLoginCallba
     private EditText edtHost, edtUsername, edtPassword;
     private Button btnLogin;
     private Odoo odoo;
-
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,27 +122,36 @@ public class LoginActivity extends AppCompatActivity implements IOdooLoginCallba
     private void loginTo(String database) {
         String username = edtUsername.getText().toString().trim();
         String password = edtPassword.getText().toString().trim();
-        odoo.authenticate(username, password, database, LoginActivity.this);
+        odoo.authenticate(username, password, database, this);
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setCancelable(false);
+        progressDialog.setTitle(R.string.please_wait);
+        progressDialog.setMessage(getString(R.string.login_in_progress));
+        progressDialog.show();
     }
 
     @Override
     public void onError(OdooError odooError) {
+        if (progressDialog != null && progressDialog.isShowing())
+            progressDialog.dismiss();
         Log.e("odoo connection", odooError.getMessage(), odooError.getThrowable());
         Toast.makeText(this, R.string.unable_to_connect_odoo, Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onLoginSuccess(Odoo odoo, OUser oUser) {
-
+        progressDialog.dismiss();
         AccountManager manager = (AccountManager) getSystemService(ACCOUNT_SERVICE);
         Account account = new Account(oUser.getAndroidName(), OdooAuthenticator.AUTH_TYPE);
         if (manager.addAccountExplicitly(account, oUser.getPassword(), oUser.getAsBundle())) {
+            ContentResolver.setSyncAutomatically(account, ContactSyncAdapter.AUTHORITY, true);
             redirectToHome();
         }
     }
 
     @Override
     public void onLoginFail(OdooError odooError) {
+        progressDialog.dismiss();
         Toast.makeText(LoginActivity.this, R.string.invalid_username_or_password, Toast.LENGTH_SHORT).show();
     }
 
