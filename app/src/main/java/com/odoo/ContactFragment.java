@@ -3,7 +3,6 @@ package com.odoo;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -22,10 +21,11 @@ import android.widget.ToggleButton;
 
 import com.odoo.orm.ListRow;
 import com.odoo.orm.OListAdapter;
-import com.odoo.orm.OModel;
 import com.odoo.table.RecentContact;
 import com.odoo.table.ResPartner;
 import com.odoo.utils.BitmapUtils;
+
+import java.util.HashMap;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -38,6 +38,8 @@ public class ContactFragment extends Fragment implements
     private OListAdapter oListAdapter;
     private ListView contactList;
     private RecentContact recentContact;
+
+    private HashMap<Integer, Boolean> favToogleCache = new HashMap<>();
 
     public ContactFragment() {
     }
@@ -70,7 +72,7 @@ public class ContactFragment extends Fragment implements
     }
 
     @Override
-    public void onViewBind(View view, Cursor cursor, ListRow row) {
+    public void onViewBind(View view, Cursor cursor, final ListRow row) {
 
         TextView textContactName, textContactEmail, textContactCity, textContactNumber;
         ImageView profileImage, isCompany;
@@ -86,7 +88,6 @@ public class ContactFragment extends Fragment implements
 
         String stringName, stringEmail, stringCity, stringMobile, stringImage, stringCompanyType,
                 stringToggle;
-        final int _id = row.getInt(OModel._ID);
         stringName = row.getString("name");
         stringEmail = row.getString("email");
         stringCity = row.getString("city");
@@ -115,31 +116,32 @@ public class ContactFragment extends Fragment implements
                     stringImage));
         }
 
-        if (stringToggle.equals("false")) {
-            toggleFavourite.setChecked(false);
+        boolean isFav = !stringToggle.equals("false");
+        if (favToogleCache.containsKey(row.getInt("_id"))) {
+            isFav = favToogleCache.get(row.getInt("_id"));
         } else {
-            toggleFavourite.setChecked(true);
+            favToogleCache.put(row.getInt("_id"), isFav);
         }
+        toggleFavourite.setChecked(isFav);
         toggleFavourite.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 ContentValues values = new ContentValues();
-
+                favToogleCache.put(row.getInt("_id"), toggleFavourite.isChecked());
                 if (toggleFavourite.isChecked()) {
                     values.put("isFavourite", "true");
-
                 } else {
                     values.put("isFavourite", "false");
                 }
-                resPartner.update(values, "_id = ? ", String.valueOf(_id));
+                resPartner.update(values, "_id = ? ", String.valueOf(row.getInt("_id")));
+                getContext().getContentResolver().notifyChange(resPartner.uri(), null);
             }
         });
     }
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        Uri uri = Uri.parse("content://com.odoo.contacts.res_partner/res_partner");
-        return new CursorLoader(getContext(), uri, null, null, null, null);
+        return new CursorLoader(getContext(), resPartner.uri(), null, null, null, null);
     }
 
     @Override
@@ -166,7 +168,7 @@ public class ContactFragment extends Fragment implements
         ContentValues values = new ContentValues();
         values.put("contact_id", cr.getInt(cr.getColumnIndex("_id")));
         recentContact.update_or_create(values, "contact_id = ? ", cr.getInt(cr.getColumnIndex("_id")) + "");
-
+        getContext().getContentResolver().notifyChange(resPartner.uri(), null);
         startActivity(intent);
 
     }

@@ -1,6 +1,7 @@
 package com.odoo.table;
 
 import android.content.Context;
+import android.net.Uri;
 
 import com.odoo.orm.OColumn;
 import com.odoo.orm.OModel;
@@ -29,4 +30,8 @@ public class ResPartner extends OModel {
         super(context, "res.partner");
     }
 
+    @Override
+    public Uri uri() {
+        return Uri.parse("content://com.odoo.contacts.res_partner/res_partner");
+    }
 }

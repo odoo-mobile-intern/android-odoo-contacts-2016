@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.net.Uri;
 import android.provider.BaseColumns;
 import android.util.Log;
 
@@ -98,11 +99,15 @@ public abstract class OModel extends SQLiteOpenHelper implements BaseColumns {
     }
 
     public int create(ContentValues contentValues) {
-        SQLiteDatabase database = getWritableDatabase();
-        Long id = database.insert(getTableName(), null, contentValues);
-        int new_id = id.intValue();
-        database.close();
-        return new_id;
+        if (!uri().equals(Uri.EMPTY)) {
+            Uri uri = mContext.getContentResolver().insert(uri(), contentValues);
+            return Integer.parseInt(uri.getLastPathSegment());
+        } else {
+            SQLiteDatabase database = getWritableDatabase();
+            Long id = database.insert(getTableName(), null, contentValues);
+            database.close();
+            return id.intValue();
+        }
     }
 
     public List<ListRow> select(String where, String... args) {
@@ -186,5 +191,10 @@ public abstract class OModel extends SQLiteOpenHelper implements BaseColumns {
             }
         }
         return null;
+    }
+
+
+    public Uri uri() {
+        return Uri.EMPTY;
     }
 }

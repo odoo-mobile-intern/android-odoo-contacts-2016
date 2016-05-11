@@ -2,7 +2,6 @@ package com.odoo;
 
 
 import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -97,8 +96,8 @@ public class RecentFragment extends Fragment implements OListAdapter.OnViewBindL
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        Uri uri = Uri.parse("content://com.odoo.contacts.res_partner/res_partner");
-        return new CursorLoader(getContext(), uri, null, "_id in (select contact_id from recent_contact ) ", null, null);
+        return new CursorLoader(getContext(), resPartner.uri(),
+                null, "_id in (select contact_id from recent_contact ) ", null, null);
     }
 
     @Override
