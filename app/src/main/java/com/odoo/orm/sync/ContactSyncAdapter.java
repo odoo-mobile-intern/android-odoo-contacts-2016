@@ -51,6 +51,7 @@ public class ContactSyncAdapter extends AbstractThreadedSyncAdapter {
     public void onPerformSync(Account account, Bundle extras, String authority,
                               ContentProviderClient provider, SyncResult syncResult) {
 
+        Log.v("Perform Sync", "Sync started.");
         // Finding details of user by account and account manager
         mUser = findUser(account);
         try {
