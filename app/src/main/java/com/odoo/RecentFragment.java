@@ -98,7 +98,7 @@ public class RecentFragment extends Fragment implements OListAdapter.OnViewBindL
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         Uri uri = Uri.parse("content://com.odoo.contacts.res_partner/res_partner");
-        return new CursorLoader(getContext(), uri, null, "_id in (select contact_id from RecentContact ) ", null, null);
+        return new CursorLoader(getContext(), uri, null, "_id in (select contact_id from recent_contact ) ", null, null);
     }
 
     @Override

@@ -145,6 +145,9 @@ public class ContactFragment extends Fragment implements
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         oListAdapter.changeCursor(data);
+        if (data.getCount() <= 0) {
+            ((HomeActivity) getActivity()).syncData();
+        }
     }
 
     @Override

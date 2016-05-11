@@ -12,6 +12,7 @@ public class ModelRegistry {
         models.put("res.partner", new ResPartner(context));
         models.put("res.country", new ResCountry(context));
         models.put("res.state", new ResState(context));
+        models.put("recent.contact", new RecentContact(context));
         return models;
     }
 }

@@ -104,18 +104,22 @@ public class HomeActivity extends AppCompatActivity implements TabLayout.OnTabSe
         return true;
     }
 
+    public void syncData() {
+        AccountManager accountManager = (AccountManager) getSystemService(ACCOUNT_SERVICE);
+        Account[] accounts = accountManager.getAccountsByType(OdooAuthenticator.AUTH_TYPE);
+        if (accounts.length == 1) {
+            ContentResolver.requestSync(accounts[0], ContactSyncAdapter.AUTHORITY,
+                    Bundle.EMPTY);
+            Toast.makeText(HomeActivity.this, "Sync started", Toast.LENGTH_SHORT).show();
+        }
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         switch (id) {
             case R.id.menu_sync:
-                AccountManager accountManager = (AccountManager) getSystemService(ACCOUNT_SERVICE);
-                Account[] accounts = accountManager.getAccountsByType(OdooAuthenticator.AUTH_TYPE);
-                if (accounts.length == 1) {
-                    ContentResolver.requestSync(accounts[0], ContactSyncAdapter.AUTHORITY,
-                            Bundle.EMPTY);
-                    Toast.makeText(HomeActivity.this, "Sync started", Toast.LENGTH_SHORT).show();
-                }
+                syncData();
                 break;
             case R.id.menu_remove_fav_contact:
                 List<ListRow> rows = resPartner.select("isFavourite = ? ", new String[]{"true"});
