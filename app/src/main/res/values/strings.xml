@@ -27,4 +27,5 @@
     <string name="menu_sync_label">Sync Contacts</string>
     <string name="remove_fav_contact">Remove favourite contacts</string>
     <string name="remove_recent_contact">Remove recent contacts</string>
+    <string name="hint_search_contact">Search contact</string>
 </resources>

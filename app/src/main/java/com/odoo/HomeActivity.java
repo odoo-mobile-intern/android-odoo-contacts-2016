@@ -60,13 +60,12 @@ public class HomeActivity extends AppCompatActivity implements TabLayout.OnTabSe
             doMySearch(query);
         }
 
-        searchview = (SearchView) findViewById(R.id.searchview1);
+        searchview = (SearchView) findViewById(R.id.contactSearchView);
         searchview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // setSubmitButtonEnabled(true);
-                //setQueryRefinementEnabled(true)
-
+                // Redirecting to global contact search activity
+                startActivity(new Intent(HomeActivity.this, SearchContactActivity.class));
             }
         });
 

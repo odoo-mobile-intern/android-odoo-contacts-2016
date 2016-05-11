@@ -60,16 +60,13 @@
                 android:resource="@xml/contact_sync_adapter" />
         </service>
 
-        <!--
- ATTENTION: This was auto-generated to add Google Play services to your project for
-     App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information.
-        -->
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
         <activity android:name=".ContactDetailActivity" />
-        <activity android:name=".AddContact"></activity>
+        <activity android:name=".AddContact" />
+        <activity android:name=".SearchContactActivity" />
     </application>
 
 </manifest>
