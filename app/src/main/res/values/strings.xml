@@ -11,7 +11,7 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="unable_to_connect_odoo">nable to connect with odoo server</string>
+    <string name="unable_to_connect_odoo">Unable to connect with odoo server</string>
 
     <string name="searh_title">Search</string>
     <string name="search_title">searchbar</string>
@@ -28,4 +28,5 @@
     <string name="remove_fav_contact">Remove favourite contacts</string>
     <string name="remove_recent_contact">Remove recent contacts</string>
     <string name="hint_search_contact">Search contact</string>
+    <string name="select_database">Select database</string>
 </resources>

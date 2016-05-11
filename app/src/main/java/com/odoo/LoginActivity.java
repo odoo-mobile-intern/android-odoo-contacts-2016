@@ -2,8 +2,10 @@ package com.odoo;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -105,17 +107,19 @@ public class LoginActivity extends AppCompatActivity implements IOdooLoginCallba
             @Override
             public void onDatabasesLoad(List<String> list) {
                 if (list.size() > 1) {
-                    // TODO: Show database selection dialog
-
+                    showDatabaseSelection(list);
                 } else {
                     // auto select first database and login.
-                    String username = edtUsername.getText().toString().trim();
-                    String password = edtPassword.getText().toString().trim();
-                    String database = list.get(0);
-                    odoo.authenticate(username, password, database, LoginActivity.this);
+                    loginTo(list.get(0));
                 }
             }
         });
+    }
+
+    private void loginTo(String database) {
+        String username = edtUsername.getText().toString().trim();
+        String password = edtPassword.getText().toString().trim();
+        odoo.authenticate(username, password, database, LoginActivity.this);
     }
 
     @Override
@@ -143,5 +147,22 @@ public class LoginActivity extends AppCompatActivity implements IOdooLoginCallba
         startActivity(new Intent(this, HomeActivity.class));
         finish();
     }
+
+
+    private void showDatabaseSelection(final List<String> databases) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.select_database);
+        builder.setSingleChoiceItems(databases.toArray(new String[databases.size()]), 0,
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        String database = databases.get(which);
+                        loginTo(database);
+                    }
+                });
+        builder.create().show();
+    }
+
 
 }
