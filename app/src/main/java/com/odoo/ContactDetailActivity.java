@@ -630,7 +630,11 @@ public class ContactDetailActivity extends AppCompatActivity implements View.OnC
         smsIntent.setType("vnd.android-dir/mms-sms");
         smsIntent.putExtra("address", number);
         smsIntent.putExtra("sms_body", "");
-        startActivity(smsIntent);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED) {
+            Toast.makeText(ContactDetailActivity.this, "Send Message Permission required", Toast.LENGTH_SHORT).show();
+        } else {
+            startActivity(smsIntent);
+        }
     }
 
     public void callToContact(String number) {
