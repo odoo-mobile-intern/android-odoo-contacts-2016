@@ -127,17 +127,25 @@ public abstract class OModel extends SQLiteOpenHelper implements BaseColumns {
     }
 
     public int update(ContentValues values, String where, String... args) {
-        SQLiteDatabase db = getWritableDatabase();
-        int count = db.update(getTableName(), values, where, args);
-        db.close();
-        return count;
+        if (!uri().equals(Uri.EMPTY)) {
+            return mContext.getContentResolver().update(uri(), values, where, args);
+        } else {
+            SQLiteDatabase db = getWritableDatabase();
+            int count = db.update(getTableName(), values, where, args);
+            db.close();
+            return count;
+        }
     }
 
     public int delete(String where, String... args) {
-        SQLiteDatabase db = getWritableDatabase();
-        int count = db.delete(getTableName(), where, args);
-        db.close();
-        return count;
+        if (!uri().equals(Uri.EMPTY)) {
+            return mContext.getContentResolver().delete(uri(),where,args);
+        } else {
+            SQLiteDatabase db = getWritableDatabase();
+            int count = db.delete(getTableName(), where, args);
+            db.close();
+            return count;
+        }
     }
 
 

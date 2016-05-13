@@ -54,13 +54,23 @@ public class ContactProvider extends ContentProvider {
 
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
-        return 0;
+        SQLiteDatabase database = resPartner.getWritableDatabase();
+        int count = database.delete(resPartner.getTableName(), selection, selectionArgs);
+        Context ctx = getContext();
+        assert ctx != null;
+        ctx.getContentResolver().notifyChange(uri, null);
+        return count;
     }
 
     @Override
     public int update(Uri uri, ContentValues values, String selection,
                       String[] selectionArgs) {
-        return 0;
+        SQLiteDatabase database = resPartner.getWritableDatabase();
+        int count = database.update(resPartner.getTableName(), values, selection, selectionArgs);
+        Context ctx = getContext();
+        assert ctx != null;
+        ctx.getContentResolver().notifyChange(uri, null);
+        return count;
     }
 
 }

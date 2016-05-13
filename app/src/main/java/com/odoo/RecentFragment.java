@@ -1,6 +1,7 @@
 package com.odoo;
 
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -11,6 +12,7 @@ import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -25,7 +27,7 @@ import com.odoo.utils.BitmapUtils;
  * A simple {@link Fragment} subclass.
  */
 public class RecentFragment extends Fragment implements OListAdapter.OnViewBindListener,
-        LoaderManager.LoaderCallbacks<Cursor> {
+        LoaderManager.LoaderCallbacks<Cursor>, AdapterView.OnItemClickListener {
 
     private ResPartner resPartner;
     private OListAdapter oListAdapter;
@@ -49,6 +51,7 @@ public class RecentFragment extends Fragment implements OListAdapter.OnViewBindL
         oListAdapter = new OListAdapter(getContext(), null, R.layout.favourite_list_item);
         oListAdapter.setOnViewBindListener(this);
         recentContactList.setAdapter(oListAdapter);
+        recentContactList.setOnItemClickListener(this);
         getLoaderManager().initLoader(0, null, this);
     }
 
@@ -108,5 +111,14 @@ public class RecentFragment extends Fragment implements OListAdapter.OnViewBindL
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
         oListAdapter.changeCursor(null);
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        Cursor cr = (Cursor) oListAdapter.getItem(position);
+
+        Intent intent = new Intent(getActivity(), ContactDetailActivity.class);
+        intent.putExtra("id", cr.getInt(cr.getColumnIndex("_id")));
+        startActivity(intent);
     }
 }

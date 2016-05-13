@@ -1,14 +1,20 @@
 package com.odoo;
 
+import android.Manifest;
 import android.content.ContentValues;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,7 +39,7 @@ import java.util.HashMap;
  */
 public class ContactFragment extends Fragment implements
         LoaderManager.LoaderCallbacks<Cursor>, OListAdapter.OnViewBindListener,
-        AdapterView.OnItemClickListener {
+        AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener {
 
     private ResPartner resPartner;
     private OListAdapter oListAdapter;
@@ -62,6 +68,7 @@ public class ContactFragment extends Fragment implements
         oListAdapter.setOnViewBindListener(this);
         contactList.setAdapter(oListAdapter);
         contactList.setOnItemClickListener(this);
+        contactList.setOnItemLongClickListener(this);
 
         getLoaderManager().initLoader(0, null, this);
     }
@@ -174,7 +181,67 @@ public class ContactFragment extends Fragment implements
         recentContact.update_or_create(values, "contact_id = ? ", cr.getInt(cr.getColumnIndex("_id")) + "");
         getContext().getContentResolver().notifyChange(resPartner.uri(), null);
         startActivity(intent);
-
     }
 
+    @Override
+    public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+        final Cursor cr = (Cursor) oListAdapter.getItem(position);
+        final String stringMobileNumber = cr.getString(cr.getColumnIndex("mobile"));
+        final String stringPhoneNumber = cr.getString(cr.getColumnIndex("phone"));
+        final String stringEmail = cr.getString(cr.getColumnIndex("email"));
+
+        final CharSequence[] options = {"Delete", "Call", "Send Mail"};
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext()); //
+        builder.setTitle("SELECT ANY ONE!");
+        builder.setItems(options, new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface arg0, int item) {
+
+                arg0.dismiss();
+                if (options[item].equals("Delete")) {
+                    resPartner.delete("_id = ? ", String.valueOf(cr.getInt(cr.getColumnIndex("_id"))));
+                    Toast.makeText(getContext(), "Contact Delete", Toast.LENGTH_SHORT).show();
+                }
+                if (options[item].equals("Call")) {
+                    if (stringMobileNumber.equals("false")) {
+                        if (stringPhoneNumber.equals("false")) {
+                            Toast.makeText(getContext(), "Number not found", Toast.LENGTH_LONG).show();
+                        } else {
+                            callToContact(stringPhoneNumber);
+                        }
+                    } else {
+                        callToContact(stringMobileNumber);
+                    }
+                }
+
+                if (options[item].equals("Send Mail")) {
+                    if (stringEmail.equals("false")) {
+                        Toast.makeText(getContext(), "Email not found", Toast.LENGTH_LONG).show();
+                    } else {
+                        Intent mailIntent = new Intent(Intent.ACTION_SEND);
+                        mailIntent.setData(Uri.parse("mailto:"));
+                        mailIntent.setType("text/plain");
+                        mailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{stringEmail});
+                        startActivity(mailIntent);
+                    }
+                }
+            }
+        });
+        builder.show();
+        return true;
+    }
+
+    public void callToContact(String number) {
+        Uri phoneCall;
+        Intent dial;
+        phoneCall = Uri.parse("tel:" + number);
+        dial = new Intent(Intent.ACTION_CALL, phoneCall);
+        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+            Toast.makeText(getContext(), "Call Permission required", Toast.LENGTH_SHORT).show();
+        } else {
+            startActivity(dial);
+        }
+    }
 }

@@ -6,6 +6,7 @@ import android.accounts.AccountManager;
 import android.content.ContentProviderOperation;
 import android.content.ContentProviderResult;
 import android.content.ContentValues;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.OperationApplicationException;
 import android.content.pm.PackageManager;
@@ -22,6 +23,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NavUtils;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -463,9 +465,25 @@ public class ContactDetailActivity extends AppCompatActivity implements View.OnC
                 break;
 
             case R.id.menu_delete:
-                resPartner.delete("_id = ? ", String.valueOf(_id));
-                Toast.makeText(ContactDetailActivity.this, "Contact Deleted", Toast.LENGTH_LONG).show();
-                finish();
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle(R.string.select_database);
+                builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        resPartner.delete("_id = ? ", String.valueOf(_id));
+                        Toast.makeText(ContactDetailActivity.this, "Contact Deleted", Toast.LENGTH_LONG).show();
+                        finish();
+                    }
+                });
+                builder.setNegativeButton("Cancle", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+                builder.create().show();
+
                 break;
         }
 
