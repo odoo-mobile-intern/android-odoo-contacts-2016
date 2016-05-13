@@ -467,7 +467,7 @@ public class ContactDetailActivity extends AppCompatActivity implements View.OnC
             case R.id.menu_delete:
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setTitle(R.string.select_database);
+                builder.setTitle("You want to delete contact ?");
                 builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {

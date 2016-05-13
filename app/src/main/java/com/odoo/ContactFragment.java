@@ -201,8 +201,24 @@ public class ContactFragment extends Fragment implements
 
                 arg0.dismiss();
                 if (options[item].equals("Delete")) {
-                    resPartner.delete("_id = ? ", String.valueOf(cr.getInt(cr.getColumnIndex("_id"))));
-                    Toast.makeText(getContext(), "Contact Delete", Toast.LENGTH_SHORT).show();
+
+                    AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
+                    alert.setTitle("You want to delete contact ?");
+                    alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            resPartner.delete("_id = ? ", String.valueOf(cr.getInt(cr.getColumnIndex("_id"))));
+                            Toast.makeText(getContext(), "Contact Deleted", Toast.LENGTH_LONG).show();
+                        }
+                    });
+                    alert.setNegativeButton("Cancle", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+                    alert.create().show();
+
                 }
                 if (options[item].equals("Call")) {
                     if (stringMobileNumber.equals("false")) {
