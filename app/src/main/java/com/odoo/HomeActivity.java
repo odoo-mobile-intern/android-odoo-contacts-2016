@@ -24,12 +24,9 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.odoo.auth.OdooAuthenticator;
-import com.odoo.orm.ListRow;
 import com.odoo.orm.sync.ContactSyncAdapter;
 import com.odoo.table.RecentContact;
 import com.odoo.table.ResPartner;
-
-import java.util.List;
 
 public class HomeActivity extends AppCompatActivity implements TabLayout.OnTabSelectedListener {
 
@@ -122,15 +119,10 @@ public class HomeActivity extends AppCompatActivity implements TabLayout.OnTabSe
                 syncData();
                 break;
             case R.id.menu_remove_fav_contact:
-                List<ListRow> rows = resPartner.select("isFavourite = ? ", new String[]{"true"});
                 ContentValues values = new ContentValues();
-                if (rows != null) {
-                    for (ListRow row : rows) {
-                        values.put("isFavourite", "false");
-                        resPartner.update(values, "isFavourite = ? ", new String[]{"true"});
-                        this.getContentResolver().notifyChange(resPartner.uri(), null);
-                    }
-                }
+                values.put("isFavourite", "false");
+                resPartner.update(values, "isFavourite = ? ", new String[]{"true"});
+                this.getContentResolver().notifyChange(resPartner.uri(), null);
                 break;
             case R.id.menu_remove_recent_contact:
                 int count = resPartner.count();
