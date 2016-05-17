@@ -128,14 +128,16 @@ public class HomeActivity extends AppCompatActivity implements TabLayout.OnTabSe
                     for (ListRow row : rows) {
                         values.put("isFavourite", "false");
                         resPartner.update(values, "isFavourite = ? ", new String[]{"true"});
+                        this.getContentResolver().notifyChange(resPartner.uri(), null);
                     }
                 }
                 break;
             case R.id.menu_remove_recent_contact:
-                List<ListRow> contactRows = recentContact.select();
                 int count = resPartner.count();
                 if (count > 0) {
                     recentContact.delete(null);
+                    this.getContentResolver().notifyChange(resPartner.uri(), null);
+
                 } else {
                     Toast.makeText(HomeActivity.this, "No any contact to remove", Toast.LENGTH_SHORT).show();
                 }
