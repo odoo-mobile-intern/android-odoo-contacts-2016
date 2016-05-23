@@ -12,6 +12,7 @@ import android.content.OperationApplicationException;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.RemoteException;
 import android.provider.ContactsContract;
@@ -49,6 +50,9 @@ import java.util.List;
 
 public class ContactDetailActivity extends AppCompatActivity implements View.OnClickListener {
 
+    private static final int REQUEST_CODE_ASK_PERMISSIONS_WRITE_CONTACT = 11;
+    private static final int REQUEST_CODE_ASK_PERMISSIONS_CALL_CONTACT = 22;
+    private static final int REQUEST_CODE_ASK_PERMISSIONS_SEND_SMS = 33;
     private ResPartner resPartner;
     private ResState resState;
     private ResCountry resCountry;
@@ -606,19 +610,25 @@ public class ContactDetailActivity extends AppCompatActivity implements View.OnC
                 .build());
 
         try {
-            ContentProviderResult[] res = this.getContentResolver().applyBatch(
-                    ContactsContract.AUTHORITY, ops);
-            if (res.length > 0) {
-                final ContentProviderResult result = res[0];
-                Snackbar.make(coordinatorLayout, R.string.contact_created, Snackbar.LENGTH_LONG)
-                        .setAction(R.string.label_view, new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                Intent intent = new Intent(Intent.ACTION_VIEW, result.uri);
-                                startActivity(intent);
-                            }
-                        }).show();
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    requestPermissions(new String[]{Manifest.permission.WRITE_CONTACTS}, REQUEST_CODE_ASK_PERMISSIONS_WRITE_CONTACT);
+                }
+            } else {
+                ContentProviderResult[] res = this.getContentResolver().applyBatch(
+                        ContactsContract.AUTHORITY, ops);
+                if (res.length > 0) {
+                    final ContentProviderResult result = res[0];
+                    Snackbar.make(coordinatorLayout, R.string.contact_created, Snackbar.LENGTH_LONG)
+                            .setAction(R.string.label_view, new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    Intent intent = new Intent(Intent.ACTION_VIEW, result.uri);
+                                    startActivity(intent);
+                                }
+                            }).show();
 
+                }
             }
         } catch (RemoteException | OperationApplicationException e) {
             e.printStackTrace();
@@ -631,7 +641,9 @@ public class ContactDetailActivity extends AppCompatActivity implements View.OnC
         smsIntent.putExtra("address", number);
         smsIntent.putExtra("sms_body", "");
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED) {
-            Toast.makeText(ContactDetailActivity.this, "Send Message Permission required", Toast.LENGTH_SHORT).show();
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                requestPermissions(new String[]{Manifest.permission.SEND_SMS}, REQUEST_CODE_ASK_PERMISSIONS_SEND_SMS);
+            }
         } else {
             startActivity(smsIntent);
         }
@@ -643,7 +655,9 @@ public class ContactDetailActivity extends AppCompatActivity implements View.OnC
         phoneCall = Uri.parse("tel:" + number);
         dial = new Intent(Intent.ACTION_CALL, phoneCall);
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-            Toast.makeText(ContactDetailActivity.this, "Call Permission required", Toast.LENGTH_SHORT).show();
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                requestPermissions(new String[]{Manifest.permission.CALL_PHONE}, REQUEST_CODE_ASK_PERMISSIONS_CALL_CONTACT);
+            }
         } else {
             startActivity(dial);
         }

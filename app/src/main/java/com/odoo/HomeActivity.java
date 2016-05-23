@@ -1,14 +1,20 @@
 package com.odoo;
 
+import android.Manifest;
 import android.accounts.Account;
 import android.accounts.AccountManager;
-import android.app.SearchManager;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.BaseColumns;
+import android.provider.ContactsContract;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -16,6 +22,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -30,6 +37,7 @@ import com.odoo.table.ResPartner;
 
 public class HomeActivity extends AppCompatActivity implements TabLayout.OnTabSelectedListener {
 
+    private static final int REQUEST_CODE_ASK_PERMISSIONS_READ_CONTACTS = 11;
     private SectionsPagerAdapter mSectionsPagerAdapter;
 
     private ViewPager mViewPager;
@@ -49,13 +57,6 @@ public class HomeActivity extends AppCompatActivity implements TabLayout.OnTabSe
 
         resPartner = new ResPartner(this);
         recentContact = new RecentContact(this);
-
-        //code for search
-        Intent intent = getIntent();
-        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
-            String query = intent.getStringExtra(SearchManager.QUERY);
-            doMySearch(query);
-        }
 
         searchview = (SearchView) findViewById(R.id.contactSearchView);
         searchview.setOnClickListener(new View.OnClickListener() {
@@ -90,10 +91,6 @@ public class HomeActivity extends AppCompatActivity implements TabLayout.OnTabSe
         });
 
     }
-
-    private void doMySearch(String query) {
-    }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -130,14 +127,61 @@ public class HomeActivity extends AppCompatActivity implements TabLayout.OnTabSe
                     recentContact.delete(null);
                     this.getContentResolver().notifyChange(resPartner.uri(), null);
 
-                } else {
+                } else
                     Toast.makeText(HomeActivity.this, "No any contact to remove", Toast.LENGTH_SHORT).show();
-                }
+                break;
+            case R.id.menu_import_contact:
+
+                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        requestPermissions(new String[]{Manifest.permission.READ_CONTACTS}, REQUEST_CODE_ASK_PERMISSIONS_READ_CONTACTS);
+                    }
+                } else importContacts();
 
                 break;
 
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void importContacts() {
+        ContentResolver cr = this.getContentResolver();
+
+        Cursor cursor = cr.query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
+        if (cursor != null) {
+            if (cursor.moveToFirst()) {
+                do {
+                    int contact_id = cursor.getInt(cursor
+                            .getColumnIndex(BaseColumns._ID));
+                    String contact_name = cursor.getString(cursor
+                            .getColumnIndex("display_name"));
+                    String contact_image = cursor.getString(cursor
+                            .getColumnIndex("photo_uri"));
+
+                    Cursor phoneCR = cr.query(
+                            ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+                            null, ContactsContract.CommonDataKinds.Phone.CONTACT_ID
+                                    + " = ?", new String[]{contact_id + ""},
+                            null);
+
+                    phoneCR.moveToFirst();
+                    String contact_number = phoneCR
+                            .getString(phoneCR
+                                    .getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+
+
+                    ContentValues values = new ContentValues();
+                    values.put("name", contact_name);
+                    values.put("image_medium", contact_image);
+                    values.put("mobile", contact_number);
+                    resPartner.update_or_create(values, "name = ? ", new String[]{contact_name});
+
+
+                } while (cursor.moveToNext());
+                Log.d("TAG", cursor.getCount() + " contacts import");
+                cursor.close();
+            }
+        }
     }
 
     @Override

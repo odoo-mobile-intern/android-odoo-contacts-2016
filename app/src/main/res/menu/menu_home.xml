@@ -7,11 +7,6 @@
         android:icon="@drawable/ic_sync"
         android:title="@string/menu_sync_label"
         app:showAsAction="always" />
-    <item
-        android:id="@+id/action_settings"
-        android:orderInCategory="100"
-        android:title="@string/action_settings"
-        app:showAsAction="never" />
 
     <item
         android:id="@+id/menu_remove_fav_contact"
@@ -20,5 +15,10 @@
     <item
         android:id="@+id/menu_remove_recent_contact"
         android:title="@string/remove_recent_contact"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/menu_import_contact"
+        android:title="@string/import_contact_from_device"
         app:showAsAction="never" />
 </menu>

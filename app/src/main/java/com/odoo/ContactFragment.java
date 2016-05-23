@@ -1,12 +1,14 @@
 package com.odoo;
 
 import android.Manifest;
+import android.annotation.TargetApi;
 import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -41,6 +43,7 @@ public class ContactFragment extends Fragment implements
         LoaderManager.LoaderCallbacks<Cursor>, OListAdapter.OnViewBindListener,
         AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener {
 
+    private static final int REQUEST_CODE_ASK_PERMISSIONS_CALL_CONTACT = 11;
     private ResPartner resPartner;
     private OListAdapter oListAdapter;
     private ListView contactList;
@@ -119,6 +122,7 @@ public class ContactFragment extends Fragment implements
 
         if (stringImage.equals("false")) {
             profileImage.setImageBitmap(BitmapUtils.getAlphabetImage(getContext(), stringName));
+
         } else {
             profileImage.setImageBitmap(BitmapUtils.getBitmapImage(getContext(),
                     stringImage));
@@ -249,15 +253,17 @@ public class ContactFragment extends Fragment implements
         return true;
     }
 
+    @TargetApi(Build.VERSION_CODES.M)
     public void callToContact(String number) {
         Uri phoneCall;
         Intent dial;
         phoneCall = Uri.parse("tel:" + number);
         dial = new Intent(Intent.ACTION_CALL, phoneCall);
         if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-            Toast.makeText(getContext(), "Call Permission required", Toast.LENGTH_SHORT).show();
+            requestPermissions(new String[]{Manifest.permission.CALL_PHONE}, REQUEST_CODE_ASK_PERMISSIONS_CALL_CONTACT);
         } else {
             startActivity(dial);
         }
     }
+
 }

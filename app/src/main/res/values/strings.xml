@@ -31,4 +31,5 @@
     <string name="select_database">Select database</string>
     <string name="please_wait">Please wait...</string>
     <string name="login_in_progress">Login in progress</string>
+    <string name="import_contact_from_device">Import contacts from device</string>
 </resources>
