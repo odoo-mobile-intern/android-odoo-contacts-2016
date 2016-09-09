@@ -18,6 +18,7 @@ import android.os.RemoteException;
 import android.provider.ContactsContract;
 import android.provider.ContactsContract.CommonDataKinds.Phone;
 import android.provider.ContactsContract.Contacts.Data;
+import android.support.annotation.NonNull;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -73,6 +74,7 @@ public class ContactDetailActivity extends AppCompatActivity implements View.OnC
     private String address;
     private CoordinatorLayout coordinatorLayout;
     private LinearLayout viewLayout, editLayout;
+    private Intent dial;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -651,7 +653,6 @@ public class ContactDetailActivity extends AppCompatActivity implements View.OnC
 
     public void callToContact(String number) {
         Uri phoneCall;
-        Intent dial;
         phoneCall = Uri.parse("tel:" + number);
         dial = new Intent(Intent.ACTION_CALL, phoneCall);
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
@@ -670,5 +671,15 @@ public class ContactDetailActivity extends AppCompatActivity implements View.OnC
             return accounts[0];
         }
         return null;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case REQUEST_CODE_ASK_PERMISSIONS_CALL_CONTACT:
+                startActivity(dial);
+                break;
+        }
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 }
