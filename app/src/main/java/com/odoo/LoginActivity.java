@@ -11,7 +11,6 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -32,7 +31,6 @@ public class LoginActivity extends AppCompatActivity implements IOdooLoginCallba
         IOdooConnectionListener {
 
     private EditText edtHost, edtUsername, edtPassword;
-    private Button btnLogin;
     private Odoo odoo;
     private ProgressDialog progressDialog;
 
@@ -53,8 +51,7 @@ public class LoginActivity extends AppCompatActivity implements IOdooLoginCallba
         edtUsername = (EditText) findViewById(R.id.edtUsername);
         edtPassword = (EditText) findViewById(R.id.edtPassword);
 
-        btnLogin = (Button) findViewById(R.id.btnLogin);
-        btnLogin.setOnClickListener(this);
+        findViewById(R.id.btnLogin).setOnClickListener(this);
     }
 
     @Override
